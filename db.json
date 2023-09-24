@@ -1,0 +1,188 @@
+{
+    "chatData": {
+        "global": {
+            "messages": {
+                "1": {
+                    "message": "Hi",
+                    "time": "1:54 PM",
+                    "user": "shaurya"
+                },
+                "2": {
+                    "message": "wsp",
+                    "time": "2:42 PM",
+                    "user": "shaurya"
+                },
+                "3": {
+                    "message": "wsp",
+                    "time": "2:46 PM",
+                    "user": "shaurya"
+                },
+                "4": {
+                    "message": "hi",
+                    "time": "2:47 PM",
+                    "user": "shaurya"
+                },
+                "5": {
+                    "message": "what",
+                    "time": "2:50 PM",
+                    "user": "rrr"
+                },
+                "6": {
+                    "message": "fdasfadsfdasfdas",
+                    "time": "2:50 PM",
+                    "user": "rrr"
+                },
+                "7": {
+                    "message": "fdsa",
+                    "time": "2:50 PM",
+                    "user": "rrr"
+                },
+                "8": {
+                    "message": "what",
+                    "time": "2:51 PM",
+                    "user": "shaurya"
+                },
+                "9": {
+                    "message": "fadsdsa\ud83d\ude09\ud83d\ude12",
+                    "time": "2:51 PM",
+                    "user": "shaurya"
+                }
+            },
+            "ids": 9,
+            "type": "global"
+        },
+        "server_40": {
+            "messages": {},
+            "ids": 0,
+            "type": "groupchat",
+            "members": [
+                "shaurya"
+            ]
+        },
+        "server_41": {
+            "messages": {
+                "1": {
+                    "message": "wsp",
+                    "time": "1:54 PM",
+                    "user": "shaurya"
+                }
+            },
+            "ids": 1,
+            "type": "groupchat",
+            "members": [
+                "shaurya",
+                "aaa",
+                "robert"
+            ]
+        }
+    },
+    "users": {
+        "eee": {
+            "usr": "eee",
+            "password": "0fef7c7d3f5ba89c6ecbd837673733ec2a28bcfffd02bd68a41de633",
+            "admin": false,
+            "friendData": {
+                "friends": [],
+                "outgoing": [],
+                "pending": [],
+                "blocked": [],
+                "blockedby": []
+            },
+            "invincible": false,
+            "servers": [],
+            "banned": false
+        },
+        "shaurya": {
+            "usr": "shaurya",
+            "password": "0830362dd50cc2ef98e66f5b3f23a4e0318402bc002f0521c7e5f95d",
+            "admin": false,
+            "friendData": {
+                "friends": [
+                    "robert",
+                    "aaa"
+                ],
+                "outgoing": [],
+                "pending": [],
+                "blocked": [],
+                "blockedby": []
+            },
+            "invincible": false,
+            "servers": [
+                "41"
+            ],
+            "banned": false
+        },
+        "robert": {
+            "usr": "robert",
+            "password": "435d88ad44132637af2560742873300110413053bd99d192548ec7d7",
+            "admin": false,
+            "friendData": {
+                "friends": [
+                    "shaurya"
+                ],
+                "outgoing": [],
+                "pending": [],
+                "blocked": [],
+                "blockedby": []
+            },
+            "invincible": false,
+            "servers": [
+                "41"
+            ],
+            "banned": false
+        },
+        "aaa": {
+            "usr": "aaa",
+            "password": "435d88ad44132637af2560742873300110413053bd99d192548ec7d7",
+            "admin": false,
+            "friendData": {
+                "friends": [
+                    "shaurya"
+                ],
+                "outgoing": [],
+                "pending": [],
+                "blocked": [],
+                "blockedby": []
+            },
+            "invincible": false,
+            "servers": [
+                "41"
+            ],
+            "banned": false
+        },
+        "rrr": {
+            "usr": "rrr",
+            "password": "883de56239614fd25deedfd8e3ef3e4102f31e693d16eccf166a99f0",
+            "admin": false,
+            "friendData": {
+                "friends": [],
+                "outgoing": [],
+                "pending": [],
+                "blocked": [],
+                "blockedby": []
+            },
+            "invincible": false,
+            "servers": [],
+            "banned": false
+        }
+    },
+    "servers": {
+        "servers": 42,
+        "40": {
+            "members": [
+                "shaurya"
+            ],
+            "name": "12",
+            "owner": "shaurya"
+        },
+        "41": {
+            "members": [
+                "shaurya",
+                "aaa",
+                "robert"
+            ],
+            "name": "Testing",
+            "owner": "shaurya"
+        }
+    }
+}

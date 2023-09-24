@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Group Chat</title>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"
+    ></script>
+</head>
+<body>
+    <div class="yes">
+        <p>Create Group Chat</p>
+
+        {{r}}
+
+        <br><br>
+
+        <form action="" method="post" class="ahh">
+            <input type="name" placeholder="Enter Group Chat name" name="name" class="name"><br><br>
+            <a href="/">Want to go back to the homepage? Click here</a><br><br>
+            <input type="submit" value="create" class="send"><br>
+        </form>
+    </div>
+    <style>
+        p {
+            font-size: 50px;
+        }
+        .yes {
+            text-align: center;
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .usr{
+            padding: 10px;
+            border: 1px black solid;
+        }
+    </style>
+</body>
+</html>

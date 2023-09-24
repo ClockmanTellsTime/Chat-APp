@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="static/chat.css" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="static/chat2.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.12.0/js/md5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="static/emojionearea.css">
+    <script type="text/javascript" src="static/emojionearea.js"></script>
+
+
+    <title>Chat App!</title>
+</head>
+<body>
+    <div class="mainChat">
+        <div class="messageFake">
+            <div class="messages" >loading...</div>
+        </div>
+        <div class="controls">
+            <input type="text" class="message" placeholder="Say Something Amazing!"> 
+            <button class="send" title="Press Control+Enter to send messages">send</button>
+        </div>
+    </div>
+    <div class="chatMenu">
+        <div class="friendchats">
+            
+        </div>
+        <a href="/friends"><button class="friendsMenu">Friends (999+)</button></a>
+        <div class="tag">
+            <div class="username">
+                <label class="nameDisplay">{{session.get("user")}}</label>
+            </div>
+            <a href="/logout"><button class="logout">Log out <i class="fa fa-sign-out"></i></button></a>
+        </div>
+    </div>
+
+    <div class="serverMenu">
+    </div>
+</body>
+</html>
+
+<script>
+    var user = '{{session.get("user")}}'
+
+
+    $(document).ready(function() {
+        $(".message").emojioneArea();
+    });
+</script>

@@ -1,0 +1,87 @@
+{
+    "eee": {
+        "usr": "eee",
+        "password": "0fef7c7d3f5ba89c6ecbd837673733ec2a28bcfffd02bd68a41de633",
+        "admin": false,
+        "friendData": {
+            "friends": [],
+            "outgoing": [],
+            "pending": [],
+            "blocked": [],
+            "blockedby": []
+        },
+        "invincible": false,
+        "servers": [],
+        "banned": false
+    },
+    "shaurya": {
+        "usr": "shaurya",
+        "password": "0830362dd50cc2ef98e66f5b3f23a4e0318402bc002f0521c7e5f95d",
+        "admin": false,
+        "friendData": {
+            "friends": [
+                "robert",
+                "aaa"
+            ],
+            "outgoing": [],
+            "pending": [],
+            "blocked": [],
+            "blockedby": []
+        },
+        "invincible": false,
+        "servers": [
+            "40",
+            "41"
+        ],
+        "banned": false
+    },
+    "robert": {
+        "usr": "robert",
+        "password": "435d88ad44132637af2560742873300110413053bd99d192548ec7d7",
+        "admin": false,
+        "friendData": {
+            "friends": [
+                "shaurya"
+            ],
+            "outgoing": [],
+            "pending": [],
+            "blocked": [],
+            "blockedby": []
+        },
+        "invincible": false,
+        "servers": [],
+        "banned": false
+    },
+    "aaa": {
+        "usr": "aaa",
+        "password": "435d88ad44132637af2560742873300110413053bd99d192548ec7d7",
+        "admin": false,
+        "friendData": {
+            "friends": [
+                "shaurya"
+            ],
+            "outgoing": [],
+            "pending": [],
+            "blocked": [],
+            "blockedby": []
+        },
+        "invincible": false,
+        "servers": [],
+        "banned": false
+    },
+    "fdsafdsa": {
+        "usr": "fdsafdsa",
+        "password": "3921f83923b6ce83622c465724cb2bc85295534e4803ba6185c97bf7",
+        "admin": false,
+        "friendData": {
+            "friends": [],
+            "outgoing": [],
+            "pending": [],
+            "blocked": [],
+            "blockedby": []
+        },
+        "invincible": false,
+        "servers": [],
+        "banned": false
+    }
+}

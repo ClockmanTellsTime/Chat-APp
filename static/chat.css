@@ -1,0 +1,369 @@
+body {
+    overflow: hidden;
+}
+.top {
+    position: absolute;
+    background-color: black;
+    width: 100%;
+    height: 10%;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    user-select: none;
+}
+.controls {
+
+    display: flex;
+    position: absolute;
+    background-color: black;
+    width: 100%;
+    height: 10%;
+    bottom: 0px;
+    left: 0px;
+    text-align: center;
+    user-select: none;
+
+    justify-content: center;
+}
+.messageFake {
+    position: absolute;
+    background-color: white;
+    height: 90%;
+    width: 100%;
+}
+
+.messages {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    right: 0px;
+    padding-left: 10px;
+    word-wrap: break-word;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.message {
+    position: relative !important;
+    height: 70% !important;
+    width: 70% !important;
+    top: 10% !important;
+    font-size: 20px !important;
+    border-radius: 20px !important;
+
+    border-width: 0px !important;
+}
+.message {
+    width: 70%;
+}
+.name {
+    width: 10%;
+}
+.send {
+    position: relative;
+    width: 10%;
+    height: 70%;
+    top: 10%;
+    font-size: 20px;
+    border-radius: 20px;
+}
+
+::placeholder {
+    position: relative;
+    color: darkblue;
+}
+
+
+.passwords{
+    position: absolute;
+    text-align: center;
+    display: none;
+    background-color: grey;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%)
+}
+
+
+
+.adminP {
+    font-size: 25px;
+}
+
+.msgID, .NEWmsg, .msgID2{
+    position: relative;
+    top: 0%;
+    height: 20px !important; 
+}
+
+.messageText {
+    font-size: 20px;
+}
+
+
+.mainChat {
+    position: absolute;
+    height: 100%;
+    background-color: grey;
+    width: 70%;
+    right: 0;
+    top: 0;
+    border: 1px black solid;
+}
+
+
+.chatMenu {
+    position: absolute;
+    height: 100%;
+    background-color: grey;
+    width: 20%;
+    left: 10%;
+    top: 0;
+    border: 1px black solid;
+    
+}
+
+.serverMenu {
+    position: absolute;
+    height: 100%;
+    background-color: black;
+    width: 10%;
+    left: 0%;
+    top: 0;
+    border: 1px black solid;
+    overflow-y: scroll;
+}
+
+.serverMenu::-webkit-scrollbar {
+    display: none;
+}
+
+.friendsMenu {
+    position: absolute;
+    bottom: 10%;
+    left: 0px;
+    width: 100%;
+    height: 10%;
+    background-color: rgb(50, 50, 50);
+    color: white;
+    border:  none;
+
+    line-height: 10%;
+}
+
+.tag {
+    position: absolute;
+    bottom: 0%;
+    left: 0px;
+    width: 100%;
+    height: 10%;
+    background-color: rgb(30, 30, 30);
+    color: white;
+    border:  none;
+    overflow: hidden;
+}
+
+.nameDisplay {
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    font-size: 25px;
+}
+
+.username {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    overflow: hidden;
+}
+
+.logout {
+    position: absolute;
+    width: 40%;
+    height: 70%;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 20px;
+    background-color: white
+}
+
+.friendsMenu:hover {
+    background-color: rgb(35, 34, 34);
+}
+
+.friend {
+    color: green;
+}
+
+.blocked {
+    color: red;
+}
+
+.friendCHAT {
+    position: relative;
+    width: 100%;
+    height: 10%;
+
+    line-height: 100%;
+}
+
+
+.serverChat {
+    position: relative;
+    text-align: center;
+    width: 50%;
+    height: 10%;
+
+    line-height: 100%;
+
+    left: 50%;
+    transform: translateX(-50%);
+
+    border-radius: 100%;
+
+    font-size: 75%;
+}
+
+.friendchats {
+    position: absolute;
+    width: 100%;
+    height: 80%;
+    overflow-y: scroll;
+}
+
+.chatMenu ::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+.current{
+    background-color: rgb(50, 50, 50);
+    color: white;
+}
+
+.admin {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 40%;
+    height: 40%;
+    background-color: rgb(50, 50, 50);;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    display: none;
+    z-index: 1;
+}
+
+.hide {
+    display: none;
+}
+
+.id1, .newmsg, .id2 {
+    position: absolute;
+    height: 5%;
+    width: 80%;
+    font-size: 15px;
+    left: 10%;
+}
+
+.id1 {
+    top: 22%;
+}
+.newmsg {
+    top: 28%;
+}
+
+.id2 {
+    top: 53%;
+}
+
+.id1::placeholder,.newmsg::placeholder, .id2::placeholder {
+    color: black;
+}
+
+.adminLabel {
+    color: white;
+}
+
+
+
+.notifications {
+    position: relative;
+    width: 25px;
+    height: 25px;
+
+    right: 0%;
+
+    text-align: center;
+
+    line-height: 25px;
+
+    background-color: red;
+
+    border-radius: 10px;
+}
+
+.nameDisplay {
+    position: absolute;
+    width: 100%;
+
+    text-align: center;
+
+    line-height: 100%;
+}
+
+
+
+.messageLabel {
+    display: inline-block; /* Ensure the label's width is based on its content */
+    background-color: rgb(0, 162, 255);
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.messageText {
+    display: block; /* Change to block from inline-block */
+    background-color: inherit;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+  
+  /* Style for self messages */
+  .messageBox.self {
+    margin-left: auto;
+    padding: 8px 12px;
+    border-radius: 10px;
+  }
+
+  .messageBox:not(.self) {
+    margin-right: auto;
+    padding: 8px 12px;
+    border-radius: 10px;
+  }
+
+
+  .bar {
+    width: 100%;
+    height: 10%;
+    background-color: black;
+    color: white;
+
+    text-align: center;
+    font-size: 20px;
+
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    /* Additional styling if needed */
+  }
+
+
+  .configure {
+    color: white;
+  }
+
