@@ -12,7 +12,6 @@ body {
     user-select: none;
 }
 .controls {
-
     display: flex;
     position: absolute;
     background-color: black;
