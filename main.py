@@ -3,21 +3,6 @@ import json
 import random
 from bs4 import BeautifulSoup
 import pusher
-import signal
-
-# Define a function to handle cleanup
-# def cleanup_before_shutdown(signum, frame):
-#     # Perform cleanup operations here before the server shuts down
-#     print("Server is shutting down. Performing cleanup...")
-#     # Disconnect clients, close connections, or perform any necessary cleanup tasks
-
-# # Register the signal handler for SIGTERM and SIGINT
-# signal.signal(signal.SIGTERM, cleanup_before_shutdown)
-# signal.signal(signal.SIGINT, cleanup_before_shutdown)
-
-
-password = "31h7143jdh8413jd3hd431h8d143dij87xdasg7f143"
-URL = "https://sillysamlikesjam.pythonanywhere.com?password=" + password
 
 deleted = False
 admins = ["shaurya", "lilnasxbiggestfan"]
@@ -386,8 +371,6 @@ def configure(id):
     id = request.form.get("id")
     action = request.form.get("type")
 
-    print(id, action)
-
     memberstoupdate = []
 
     for i in db["servers"][id]["members"]:
@@ -440,8 +423,6 @@ def configure(id):
         if name == "confirm":
           for member in db["servers"][id]["members"]:
             db["users"][member]["servers"].remove(id)
-
-          print(id)
 
           del db["chatData"]["server_" + str(id)]
 
@@ -719,7 +700,8 @@ def connect():
     url = data.get("url","")
 
     # You can also trigger an event back to the client if needed
-    pusher_client.trigger(session.get("id"), 'server-to-client', {'message': 'Data received on the server'})
+    pusher_client.trigger(socketid, 'server-to-client', {'message': 'Data received on the server'})
+    print(session.get("user") + " has connected at " + url)
 
     return "ok"
 
@@ -748,7 +730,7 @@ def get_usernames(string):
     
     # Check if there are at least two parts separated by '2'
     if len(parts) >= 2:
-        username1 = parts[0][len('private-'):]  # Extract the first username
+        username1 = parts[0][len('private-dm-'):]  # Extract the first username
         username2 = parts[1]  # Extract the second username
         return username1, username2
     else:
@@ -765,9 +747,6 @@ def get_messages():
 
 
     session["room"] = room
-    
-    print(room, socket_id, user,"d")
-
 
     if not room in db["chatData"]:
 
@@ -835,7 +814,7 @@ def get_server_members():
         }
 
         pusher_client.trigger(socket_id,"servermembers",data)
-        print("s")
+
     return "ok"
 
 
@@ -872,8 +851,6 @@ def message():
     room = session.get("room")
     message = data.get("message","")
     time = data.get("time","")
-
-    print(room,"fdsafdsafasd")
 
     if not user or user == "":
         return False
@@ -917,7 +894,7 @@ def message():
     
     #pusher_client.trigger(socket_id,"messages",db["chatData"][room]["messages"])
     pusher_client.trigger(room,"message",data)
-    print("dfdsafadsfdsa", data)
+
     return "ok"
 
 
@@ -928,7 +905,6 @@ def message():
 @app.route("/writeDB/", methods=["POST", "GET"])
 def write():
   writeDB(db)
-  print("db updated!")
   return "DB Written"
 
 

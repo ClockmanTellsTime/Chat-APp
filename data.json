@@ -49,6 +49,30 @@
                 "BBC",
                 "Blaek"
             ]
+        },
+        "private-dm-lilnasxbiggestfan2shaurya": {
+            "messages": {
+                "1": {
+                    "message": "hi",
+                    "time": "5:04 PM",
+                    "user": "shaurya"
+                }
+            },
+            "ids": 1,
+            "type": "dm",
+            "members": [
+                "lilnasxbiggestfan",
+                "shaurya"
+            ]
+        },
+        "private-dm-Nolan2shaurya": {
+            "messages": {},
+            "ids": 0,
+            "type": "dm",
+            "members": [
+                "Nolan",
+                "shaurya"
+            ]
         }
     },
     "servers": {

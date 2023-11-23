@@ -154,7 +154,7 @@ function loadFriends(data) {
 
     for (var friend of data["friends"]) {
         var friendFormatted = formatFriendName(friend)
-        var chatFormatted = "private-"+mostAlphabeticalOrder(friendFormatted,user) + "2" + leastAlphabeticalOrder(friendFormatted,user)
+        var chatFormatted = "private-dm-"+mostAlphabeticalOrder(friendFormatted,user) + "2" + leastAlphabeticalOrder(friendFormatted,user)
         document.querySelector(".friendchats").innerHTML += `<button id="${chatFormatted}" class="friendCHAT ${chatFormatted}" onclick="selectChat('${chatFormatted}','${chatFormatted}')">   <div class='nameDisplay ${chatFormatted}ChatButton'>${String(friend).replaceAll("+"," ")}</div></button>`
     } 
 
@@ -257,6 +257,7 @@ function loadMessage(data) {
             <label class='messageLabel'><span class="messageText">${data.message}</span></label><br><br>
         </div>`
     }
+
 
     else {
         document.querySelector(".messages").innerHTML += `
