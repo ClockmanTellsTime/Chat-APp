@@ -5,11 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Friends</title>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-        crossorigin="anonymous"
-    ></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {
@@ -105,7 +100,7 @@
         }
 
         .btn {
-            position: absolute;
+            position: fixed;
             background-color: rgb(50, 50, 50); /* Blue background */
             border: none; /* Remove borders */
             color: white; /* White text */
@@ -118,6 +113,12 @@
         }
 
     </style>
+
+    <script>
+        var user = '{{session.get("user")}}'
+
+    </script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 </head>
 <body>
 
@@ -132,7 +133,7 @@
             <div class="addFriend">
                 Send friend request:
                 <input type="text" placeholder="User name" class="friendUSR">
-                <button class="sendRequest" >send</button>
+                <button class="sendRequest" >add</button>
             </div>
             <div class="friended"></div>
         </div>
@@ -140,6 +141,7 @@
         <div class="view3 view"></div>
         <div class="view4 view">
             <div class="blockUSER">
+                Block user:
                 <input type="text" placeholder="User name" class="blockUSR">
                 <button class="blockRequest" >block</button>
             </div>
@@ -152,9 +154,50 @@
 </html>
 
 <script defer>  
-    var socketio = io();
-    socketio.emit("getfrienddata")
+    var pusher = new Pusher('3ee636d6edcdecffe90e', {
+        cluster: 'us3',
+        encrypted: true,
+    });
+    var socket_id = ""
+
     
+
+    pusher.connection.bind('connected', function() {
+        socket_id = pusher.connection.socket_id;
+        console.log('Socket ID:', socket_id);
+        sendDataToServer("connect",{
+            event_type: "connect",
+            url: new URL(location.href).pathname,
+            socketId: socket_id
+        })
+
+        var only_you_channel = pusher.subscribe(socket_id)
+        var all_your_accounts = pusher.subscribe(user)
+
+        only_you_channel.bind("friends",function(data) {
+            loadFriends(data)
+        })
+
+        all_your_accounts.bind("friends",function(data) {
+            loadFriends(data)
+        })
+
+
+        sendDataToServer("get-friends",{"socket_id":socket_id})
+    });
+    
+    function sendDataToServer(endpoint,data) {
+        fetch(`/${endpoint}`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+    }
+
+
+
     //make other buttons work like block, accept, decline, remove friend, cancel, and chat
 
     var view = 1
@@ -199,34 +242,34 @@
 
 
     function sendFriendRequest(friendUSR) {
-        socketio.emit("sendfriendrequest", friendUSR)
+        sendDataToServer("friendrequest", {"friendUSR":friendUSR,"socket_id": socket_id})
         document.querySelector(".friendUSR").value = ""
     }
 
     function blockUser(friendUSR) {
-        socketio.emit("blockuser", friendUSR)
+        sendDataToServer("blockuser", {"friendUSR":friendUSR,"socket_id": socket_id})
         document.querySelector(".blockUSR").value = ""
     }
 
     function removeFriend(friendUSR) {
-        socketio.emit("removefriend", friendUSR)
+        sendDataToServer("removefriend", {"friendUSR":friendUSR,"socket_id": socket_id})
     }
 
     function cancelFriendRequest(friendUSR) {
-        socketio.emit("cancelfriendrequest", friendUSR)
+        sendDataToServer("cancelfriendrequest",  {"friendUSR":friendUSR,"socket_id": socket_id})
     }
 
     
     function acceptFriendRequest(friendUSR) {
-        socketio.emit("acceptfriendrequest", friendUSR)
+        sendDataToServer("acceptfriendrequest",  {"friendUSR":friendUSR,"socket_id": socket_id})
     }
 
     function declineFriendRequest(friendUSR) {
-        socketio.emit("declinefriendrequest", friendUSR)
+        sendDataToServer("declinefriendrequest",  {"friendUSR":friendUSR,"socket_id": socket_id})
     }
 
     function unblockUser(friendUSR) {
-        socketio.emit("unblockuser", friendUSR)
+        sendDataToServer("unblockuser",  {"friendUSR":friendUSR,"socket_id": socket_id})
     }
 
     function chat() {
@@ -234,9 +277,7 @@
     }
 
 
-
-    socketio.on("frienddata", function(data) {
-        console.log(data)
+    function loadFriends(data) {
         document.querySelector(".friended").innerHTML = ""
 
         for (var i of data['friends']) {
@@ -295,7 +336,7 @@
         }
 
         document.querySelector(".block").innerHTML  = `Blocked Users (${data['blocked'].length})`
-    } ); 
+    }
 
     document.querySelector(".sendRequest").onclick = () => {
         sendFriendRequest(document.querySelector(".friendUSR").value)
@@ -303,15 +344,6 @@
     document.querySelector(".blockRequest").onclick = () => {
         blockUser(document.querySelector(".blockUSR").value)
     }
-
-    socketio.on("reload", function() {
-        location.reload()
-    })
-
-    socketio.on("logout", function() {
-        socketio.emit("logout")
-        document.querySelector("head").innerHTML += `<meta http-equiv="Refresh" content="0; url='/logout'" />`
-    })
 
     document.querySelector(".btn").onclick = () => {
         document.querySelector("head").innerHTML += `<meta http-equiv="Refresh" content="0; url='/'" />`

@@ -324,6 +324,11 @@ body {
     padding: 5px 10px;
     border-radius: 10px;
 }
+
+.red {
+    background-color: red !important;
+}
+
 .messageText {
     display: block; /* Change to block from inline-block */
     background-color: inherit;

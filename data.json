@@ -2,28 +2,7 @@
     "chatData": {
         "global": {
             "ids": 4,
-            "messages": {
-                "1": {
-                    "message": "hdi",
-                    "time": "6:36 PM",
-                    "user": "shaurya"
-                },
-                "2": {
-                    "message": "f",
-                    "time": "8:50 PM",
-                    "user": "shaurya"
-                },
-                "3": {
-                    "message": "f",
-                    "time": "8:50 PM",
-                    "user": "shaurya"
-                },
-                "4": {
-                    "message": "f",
-                    "time": "8:50 PM",
-                    "user": "shaurya"
-                }
-            },
+            "messages": {},
             "type": "global"
         },
         "private-lilnasxbiggestfan2shaurya": {
@@ -59,6 +38,16 @@
             "members": [
                 "Nolan",
                 "shaurya"
+            ]
+        },
+        "private-server-678": {
+            "messages": {},
+            "ids": 0,
+            "type": "groupchat",
+            "members": [
+                "shaurya",
+                "BBC",
+                "Blaek"
             ]
         }
     },
@@ -2957,6 +2946,21 @@
             "password": "fb916c28c0885ea53a6c6a5ba322e97b9e099286564cd595a9e777fed",
             "servers": [],
             "usr": "zaaaf"
+        },
+        "aaa": {
+            "usr": "aaa",
+            "password": "435d88ad44132637af2560742873300110413053bd99d192548ec7d7",
+            "admin": false,
+            "friendData": {
+                "friends": [],
+                "outgoing": [],
+                "pending": [],
+                "blocked": [],
+                "blockedby": []
+            },
+            "invincible": false,
+            "servers": [],
+            "banned": false
         }
     }
 }

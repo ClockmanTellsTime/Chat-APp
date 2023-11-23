@@ -47,6 +47,11 @@
         }
 
     </style>
+    <script>
+        var user = '{{session.get("user")}}'
+
+    </script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 </head>
 <body>
     <p>Configure {{server}}</p>
@@ -123,26 +128,49 @@
 </body>
 </html>
 <script>
+    var pusher = new Pusher('3ee636d6edcdecffe90e', {
+        cluster: 'us3',
+        encrypted: true,
+    });
+    var socket_id = ""
     var id = "{{id}}"
 
+    pusher.connection.bind('connected', function() {
+    socket_id = pusher.connection.socket_id;
+    console.log('Socket ID:', socket_id);
+    sendDataToServer("connect",{
+        event_type: "connect",
+        url: new URL(location.href).pathname,
+        socketId: socket_id
+    })
 
-    var socketio = io();
+    var only_you_channel = pusher.subscribe(socket_id)
+    var all_your_accounts = pusher.subscribe(user)
 
-    socketio.emit('getservermembers',id)
-    socketio.emit("getfrienddata")
+    only_you_channel.bind("friends",function(data) {
+        loadFriends(data)
+    })
+
+    all_your_accounts.bind("friends",function(data) {
+        loadFriends(data)
+    })
+
+    only_you_channel.bind("servermembers",function(data) {
+        loadServerMembers(data)
+    })
+
+    
+    sendDataToServer("servermembers",{"socket_id":socket_id,"server_id":id})
+});
+
+
 
     var friends = []
     var servermembers = []
 
-    socketio.on("servermembers",function(data) {
-        console.log(data)
-
+    function loadServerMembers(data) {
         servermembers = data["members"]
-
         servermembers.shift()
-
-        console.log(servermembers)
-
         document.querySelector(".members").innerHTML = ""
 
         for (member of servermembers) {
@@ -158,10 +186,11 @@
             </div>
             `
         }
-    })
 
-    socketio.on("frienddata", function(data) {
-        console.log(data)
+        sendDataToServer("get-friends",{"socket_id":socket_id})
+    }
+
+    function loadFriends(data) {
         friends = data["friends"]
 
         friends = friends.filter(function(val) {
@@ -171,6 +200,8 @@
         document.querySelector(".friends").innerHTML = ""
 
         for (friend of friends) {
+            if (servermembers.includes(friend)) {continue}
+
             document.querySelector(".friends").innerHTML += `
             <div class="${friend}">
                 <form action="/configure/${id}" method="POST">
@@ -183,8 +214,18 @@
             </div>
             `
         }
-    })
+    }
 
+
+    function sendDataToServer(endpoint,data) {
+        fetch(`/${endpoint}`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+    }
 
 
     var ancestor = document.querySelector('body')
@@ -201,13 +242,5 @@
         document.querySelector("head").innerHTML += `<meta http-equiv="Refresh" content="0; url='/'" />`
     }
 
-    socketio.on("reload", function() {
-        location.reload()
-    })
-
-    socketio.on("logout", function() {
-        socketio.emit("logout")
-        document.querySelector("head").innerHTML += `<meta http-equiv="Refresh" content="0; url='/logout'" />`
-    })
 
 </script>

@@ -1,20 +1,26 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
-from flask_socketio import SocketIO, emit, join_room, leave_room
 import json
 import random
 from bs4 import BeautifulSoup
-from os import environ
-from dotenv import load_dotenv
-import requests
 import pusher
+import signal
 
-load_dotenv()
+# Define a function to handle cleanup
+# def cleanup_before_shutdown(signum, frame):
+#     # Perform cleanup operations here before the server shuts down
+#     print("Server is shutting down. Performing cleanup...")
+#     # Disconnect clients, close connections, or perform any necessary cleanup tasks
+
+# # Register the signal handler for SIGTERM and SIGINT
+# signal.signal(signal.SIGTERM, cleanup_before_shutdown)
+# signal.signal(signal.SIGINT, cleanup_before_shutdown)
+
 
 password = "31h7143jdh8413jd3hd431h8d143dij87xdasg7f143"
 URL = "https://sillysamlikesjam.pythonanywhere.com?password=" + password
 
 deleted = False
-admins = ["shaurya", "lilnasxbiggestfan","BBC"]
+admins = ["shaurya", "lilnasxbiggestfan"]
 
 pusher_client = pusher.Pusher(
   app_id='1671920',
@@ -41,7 +47,6 @@ def writeDB(data):
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "432178i784321789hcer7fncsansdjfd8h3e9823he"
 
-socketio = SocketIO(app, cors_allowed_origins="*")
 
 db = openDB()
 
@@ -335,12 +340,6 @@ def signin():
     if password == "":
       return render_template("signin.html", r="You must have a password...")
 
-    if usr == len(usr) * usr[0] and usr[0] == "+":
-      return render_template("signin.html", r="You must have a username...")
-
-    if password == len(password) * password[0] and password[0] == "+":
-      return render_template("signin.html", r="You must have a password...")
-
     if usr in db["users"].keys():
       if db["users"][usr]["banned"]:
         return render_template("banned.html", usr=usr)
@@ -351,8 +350,7 @@ def signin():
         return redirect(url_for("join"))
 
       else:
-        return render_template("signin.html",
-                               r="Password and/or Username is incorrect!")
+        return render_template("signin.html",r="Password and/or Username is incorrect!",usr=usr)
     else:
       return render_template("signin.html", r="User was not found")
 
@@ -378,7 +376,7 @@ def friends():
 @app.route("/configure/<id>/", methods=["POST", "GET"])
 def configure(id):
   user = session.get("user")
-
+  
   id = id
 
   if not user or user == "":
@@ -407,10 +405,11 @@ def configure(id):
           db["servers"][id]["members"].remove(name)
           db["users"][name]["servers"].remove(id)
 
-          db["chatData"]["server_" +
-                         str(id)]["members"] = db["servers"][id]["members"]
+          if not "server_" + str(id) in db["chatData"]:
+            db["chatData"]["server_" + str(id)] = {"messages": {}, "ids": 0}
 
-        socketio.emit("reload", room=name)
+          db["chatData"]["server_" + str(id)]["members"] = db["servers"][id]["members"]
+
 
       if action == "add":
         name = request.form.get("name")
@@ -421,8 +420,11 @@ def configure(id):
           db["servers"][id]["members"].append(name)
           db["users"][name]["servers"].append(id)
 
-          db["chatData"]["server_" +
-                         str(id)]["members"] = db["servers"][id]["members"]
+          if not "server_" + str(id) in db["chatData"]:
+            db["chatData"]["server_" + str(id)] = {"messages": {}, "ids": 0}
+
+
+          db["chatData"]["server_" + str(id)]["members"] = db["servers"][id]["members"]
 
           memberstoupdate.append(name)
 
@@ -468,16 +470,27 @@ def configure(id):
               "id": server,
           }
 
-          if db["servers"][server]["name"] in db["users"][member].keys():
-            socketio.emit("servermembers", data, room=member)
 
-        socketio.emit("serverData", serverData, room=member)
+        servers = db["users"][member]["servers"]
+
+        serverData = {}
+
+        for server in servers:
+            serverData[server] = {
+                "owner": db["servers"][str(server)]["owner"],
+                "name": db["servers"][str(server)]["name"],
+                "members": db["servers"][str(server)]["members"],
+                "id": server,
+            }
+
+
+        pusher_client.trigger(member,"servers",serverData)
+
+        pusher_client.trigger(member,"servermembers",data)
 
   if str(id) in db["servers"].keys():
     if user == db["servers"][str(id)]["owner"]:
-      return render_template("configure.html",
-                             server=db["servers"][str(id)]["name"],
-                             id=id)
+      return render_template("configure.html",server=db["servers"][str(id)]["name"],id=id)
 
     else:
       return "You dont have permission to do this!"
@@ -509,484 +522,24 @@ def leave(id):
         "id": id,
     }
 
-    socketio.emit("servermembers", data, room=member)
+    pusher_client.trigger(member,"servermembers",data)
 
   return redirect(url_for("join"))
 
 
-@app.route("/reloadall", methods=["POST", "GET"])
-def admin_1():
+
+
+
+
+
+
+@app.route("/friendrequest", methods=["POST", "GET"])
+def friendrequest():
   user = session.get("user")
+  data = request.json
+  socket_id = data.get("socket_id","")
+  friend = data.get("friendUSR","")
 
-  if user in admins:
-    socketio.emit("reload")
-    return "reloading..."
-
-  return "404 page not found"
-
-
-@app.route("/logoutall", methods=["POST", "GET"])
-def admin_2():
-  user = session.get("user")
-  user_to_logout = request.args.get("user")
-
-  if user in admins:
-    if not user_to_logout:
-      socketio.emit("logout")
-      return "logging everyone out..."
-
-    else:
-      socketio.emit("logout", room=user_to_logout)
-      return "logging " + user_to_logout + " out..."
-
-  return "404 page not found"
-
-
-@app.route("/ban", methods=["POST", "GET"])
-def admin_3():
-  user = session.get("user")
-  user_to_ban = request.args.get("user")
-
-  if user in admins:
-
-    db["users"][user_to_ban]["banned"] = True
-
-    socketio.emit("logout", room=user_to_ban)
-
-    return "banning " + user_to_ban
-
-  return "404 page not found"
-
-
-@app.route("/unban", methods=["POST", "GET"])
-def admin_4():
-  user = session.get("user")
-  user_to_ban = request.args.get("user")
-
-  if user in admins:
-    db["users"][user_to_ban]["banned"] = False
-
-    return "unbanning " + user_to_ban
-
-  return "404 page not found"
-
-
-@app.route("/loginasuser", methods=["POST", "GET"])
-def admin_5():
-  user = session.get("user")
-  user_to_hack = request.args.get("user")
-
-  if user in admins:
-    session["user"] = user_to_hack
-    return "logging in as " + user_to_hack
-
-  return "404 page not found"
-
-
-@app.route("/resetchat", methods=["POST", "GET"])
-def admin_6():
-  user = session.get("user")
-
-  if user in admins:
-    db["chatData"]["global"] = {"messages": {}, "ids": 0, "type": "global"}
-
-    socketio.emit("reload")
-    return "Clearing chat"
-
-  return "404 page not found"
-
-
-@app.route("/delete", methods=["POST", "GET"])
-def admin_7():
-  global deleted
-
-  user = session.get("user")
-
-  if user in admins:
-    deleted = True
-    socketio.emit("reload")
-    return "deleting..."
-
-  return "404 page not found"
-
-
-@app.route("/undelete", methods=["POST", "GET"])
-def admin_8():
-  global deleted
-
-  user = session.get("user")
-
-  if user in admins:
-    deleted = False
-    socketio.emit("reload")
-    return "undeleting..."
-
-  return "404 page not found"
-
-
-@socketio.on("message")
-def handle_message(message, time):
-  user = session.get("user")
-  room = session.get("room")
-  id = session.get("id")
-
-  if not user or user == "":
-    return False
-
-  if not room:
-    return False
-
-  if message == "":
-    return
-
-  if is_html(message):
-    return
-
-  if len(message) > 1000:
-    return
-
-  if not room in db["chatData"]:
-    db["chatData"][room] = {"messages": {}, "ids": 0}
-
-  db["chatData"][room]["ids"] += 1
-
-  id = str(db["chatData"][room]["ids"])
-
-  db["chatData"][room]["messages"][id] = {
-      "message": message,
-      "time": time,
-      "user": user
-  }
-
-  data = {
-      "message": message,
-      "room": room,
-      "time": time,
-      "user": user,
-      "type": db["chatData"][room]["type"]
-  }
-
-  if "server_" in str(room):
-    data["servername"] = db["servers"][room[7:len(room)]]["name"]
-
-  emit(
-      "message",
-      data,
-      room=room,
-  )
-
-  if db["chatData"][room]["type"] == "dm":
-    otherUser = ""
-
-    for i in db["chatData"][room]["members"]:
-      if i == user:
-        continue
-      else:
-        otherUser = i
-
-    # update messages read when they are in channel
-
-    if user not in db["userdata"].keys():
-      db["userdata"][user] = {}
-
-    if not room in db["userdata"][user].keys():
-      db["userdata"][user][room] = {"read": 0}
-
-    if otherUser not in db["userdata"].keys():
-      db["userdata"][otherUser] = {"rooms": []}
-
-    if not room in db["userdata"][otherUser].keys():
-      db["userdata"][otherUser][room] = {"read": 0}
-
-    if otherUser in db["userdata"].keys():
-      if room in db["userdata"][otherUser]["rooms"]:
-        db["userdata"][otherUser][room]["read"] = int(
-            db["chatData"][room]["ids"])
-
-      else:
-        emit(
-            "dm",
-            {
-                "amount":
-                int(db["chatData"][room]["ids"]) -
-                db["userdata"][otherUser][room]["read"],
-                "room":
-                room,
-                "user":
-                user,
-            },
-            room=otherUser,
-        )
-        emit(
-            "dm2",
-            {
-                "amount":
-                int(db["chatData"][room]["ids"]) -
-                db["userdata"][otherUser][room]["read"],
-                "room":
-                room,
-                "user":
-                user,
-            },
-            room=otherUser,
-        )
-
-    # update our users read as well
-    db["userdata"][user][room]["read"] = int(db["chatData"][room]["ids"])
-
-
-@socketio.on("joinroom")
-def joinRoom(room):
-  user = session.get("user")
-  id = session.get("id")
-  room2 = session.get("room")
-
-  if not user or user == "":
-    return redirect(url_for("signin"))
-
-  if not user in db["userdata"].keys():
-    db["userdata"][user] = {}
-
-  if not "rooms" in db["userdata"][user].keys():
-    db["userdata"][user]["rooms"] = []
-
-  # if they already in a room
-  if room2:
-    leave_room(room2)
-
-    if room2 in db["userdata"][user]["rooms"]:
-      db["userdata"][user]["rooms"].remove(room2)
-
-  if not room in db["chatData"]:
-
-    for server in db["servers"]:
-      if server == "servers":
-        continue
-
-      id = room[7:len(room)]
-
-      if str(id) in db["servers"]:
-        db["chatData"][room] = {
-            "messages": {},
-            "ids": 0,
-            "type": "groupchat",
-            "members": db["servers"][server]["members"],
-        }
-      else:
-        socketio.emit("allmessages",
-                      db["chatData"]["global"]["messages"],
-                      room=id)
-        session["room"] = "global"
-        join_room("global")
-
-        db["userdata"][user]["rooms"].append("global")
-
-  if room != "global":
-    if user in db["chatData"][room]["members"]:
-      socketio.emit("allmessages", db["chatData"][room]["messages"], room=id)
-      session["room"] = room
-      join_room(room)
-
-      db["userdata"][user]["rooms"].append(room)
-
-    else:
-      socketio.emit("allmessages",
-                    db["chatData"]["global"]["messages"],
-                    room=id)
-      session["room"] = "global"
-      join_room("global")
-
-      db["userdata"][user]["rooms"].append("global")
-
-  else:
-    socketio.emit("allmessages", db["chatData"]["global"]["messages"], room=id)
-    session["room"] = "global"
-    join_room("global")
-
-    db["userdata"][user]["rooms"].append("global")
-
-
-@socketio.on("joindm")
-def joinDm(otherUser):
-  user = session.get("user")
-  id = session.get("id")
-  room2 = session.get("room")
-
-  if not user or user == "":
-    return redirect(url_for("signin"))
-
-  if not user in db["userdata"].keys():
-    db["userdata"][user] = {}
-
-  if not "rooms" in db["userdata"][user].keys():
-    db["userdata"][user]["rooms"] = []
-
-  if room2:
-    leave_room(room2)
-
-    if room2 in db["userdata"][user]["rooms"]:
-      db["userdata"][user]["rooms"].remove(room2)
-
-  room1 = user + "TO" + otherUser
-  room2 = otherUser + "TO" + user
-
-  if (otherUser in db["users"][user]["friendData"]["friends"]
-      and user in db["users"][otherUser]["friendData"]["friends"]):
-    if room1 in db["chatData"]:
-      session["room"] = room1
-      join_room(room1)
-      socketio.emit("allmessages", db["chatData"][room1]["messages"], room=id)
-
-      if not user in db["userdata"].keys():
-        db["userdata"][user] = {}
-
-      if not room1 in db["userdata"][user].keys():
-        db["userdata"][user][room1] = {"read": 0}
-
-      db["userdata"][user][room1]["read"] = int(db["chatData"][room1]["ids"])
-
-      db["userdata"][user]["rooms"].append(room1)
-
-    elif room2 in db["chatData"]:
-      session["room"] = room2
-      join_room(room2)
-      socketio.emit("allmessages", db["chatData"][room2]["messages"], room=id)
-
-      if not user in db["userdata"].keys():
-        db["userdata"][user] = {}
-
-      if not room2 in db["userdata"][user].keys():
-        db["userdata"][user][room2] = {"read": 0}
-
-      db["userdata"][user][room2]["read"] = int(db["chatData"][room2]["ids"])
-
-      db["userdata"][user]["rooms"].append(room2)
-
-    else:
-      db["chatData"][room1] = {
-          "messages": {},
-          "ids": 0,
-          "members": [user, otherUser],
-          "type": "dm",
-      }
-      join_room(room1)
-      session["room"] = room1
-      socketio.emit("allmessages", db["chatData"][room1]["messages"], room=id)
-
-      db["userdata"][user]["rooms"].append(room1)
-
-  else:
-    socketio.emit("allmessages", db["chatData"]["global"]["messages"], room=id)
-    session["room"] = "global"
-    join_room("global")
-
-    db["userdata"][user]["rooms"].append("global")
-
-
-@socketio.on("getfrienddata")
-def frienddata():
-  user = session.get("user")
-  id = session.get("id")
-
-  if not user or user == "":
-    return redirect(url_for("signin"))
-
-  socketio.emit("frienddata", db["users"][user]["friendData"], room=id)
-
-  # get amount of notifications from dm they have for each friend
-
-  for friend in db["users"][user]["friendData"]["friends"]:
-    room1 = user + "TO" + friend
-    room2 = friend + "TO" + user
-
-    if not user in db["userdata"].keys():
-      db["userdata"][user] = {}
-
-    if room1 in db["chatData"]:
-      if not room1 in db["userdata"][user].keys():
-        db["userdata"][user][room1] = {"read": 0}
-
-      emit(
-          "dm",
-          {
-              "amount":
-              int(db["chatData"][room1]["ids"]) -
-              db["userdata"][user][room1]["read"],
-              "room":
-              room1,
-              "user":
-              friend,
-          },
-          room=user,
-      )
-
-    elif room2 in db["chatData"]:
-      if room2 in db["chatData"]:
-        if not room2 in db["userdata"][user].keys():
-          db["userdata"][user][room2] = {"read": 0}
-
-      emit(
-          "dm",
-          {
-              "amount":
-              int(db["chatData"][room2]["ids"]) -
-              db["userdata"][user][room2]["read"],
-              "room":
-              room2,
-              "user":
-              friend,
-          },
-          room=user,
-      )
-
-
-@socketio.on("logout")
-def logout():
-  user = session.get("user")
-
-  if not user:
-    return
-
-  leave_room(user)
-
-
-@socketio.on("connect")
-def connect():
-  user = session.get("user")
-  id = session.get("id")
-
-  if user and user != "":
-    join_room(user)
-
-  if id and id != "":
-    join_room(id)
-
-
-@socketio.on("disconnect")
-def disconnect():
-  user = session.get("user")
-  id = session.get("id")
-  room = session.get("room")
-
-  if not user or user == "":
-    return
-
-  if not user in db["userdata"].keys():
-    db["userdata"][user] = {}
-
-  if not "rooms" in db["userdata"][user].keys():
-    db["userdata"][user]["rooms"] = []
-
-  if room:
-    leave_room(room)
-
-    if room in db["userdata"][user]["rooms"]:
-      db["userdata"][user]["rooms"].remove(room)
-
-
-@socketio.on("sendfriendrequest")
-def friendrequest(friend):
-  user = session.get("user")
 
   if not user or user == "":
     return redirect(url_for("signin"))
@@ -1004,13 +557,18 @@ def friendrequest(friend):
     db["users"][user]["friendData"]["outgoing"].append(friend)
     db["users"][friend]["friendData"]["pending"].append(user)
 
-    socketio.emit("frienddata", db["users"][user]["friendData"], room=user)
-    socketio.emit("frienddata", db["users"][friend]["friendData"], room=friend)
+  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  return "ok"
 
 
-@socketio.on("blockuser")
-def blockuser(friend):
+@app.route("/blockuser", methods=["POST", "GET"])
+def blockuser():
   user = session.get("user")
+  data = request.json
+  socket_id = data.get("socket_id","")
+  friend = data.get("friendUSR","")
+
 
   if not user or user == "":
     return redirect(url_for("signin"))
@@ -1042,13 +600,17 @@ def blockuser(friend):
     if user in db["users"][friend]["friendData"]["friends"]:
       db["users"][friend]["friendData"]["friends"].remove(user)
 
-    socketio.emit("frienddata", db["users"][user]["friendData"], room=user)
-    socketio.emit("frienddata", db["users"][friend]["friendData"], room=friend)
+  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  return "ok"
 
 
-@socketio.on("removefriend")
-def removefriend(friend):
+@app.route("/removefriend", methods=["POST", "GET"])
+def removefriend():
+  data = request.json
   user = session.get("user")
+  friend = data.get("friendUSR","")
+  socket_id = data.get("socket_id","")
 
   if not user or user == "":
     return redirect(url_for("signin"))
@@ -1057,30 +619,39 @@ def removefriend(friend):
     db["users"][user]["friendData"]["friends"].remove(friend)
     db["users"][friend]["friendData"]["friends"].remove(user)
 
-    socketio.emit("frienddata", db["users"][user]["friendData"], room=user)
-    socketio.emit("frienddata", db["users"][friend]["friendData"], room=friend)
+
+  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+
+  return "ok"
 
 
-@socketio.on("unblockuser")
-def unblockuser(friend):
+@app.route("/unblockuser", methods=["POST", "GET"])
+def unblockuser():
   user = session.get("user")
+  data = request.json
+  socket_id = data.get("socket_id","")
+  friend = data.get("friendUSR","")
+
 
   if not user or user == "":
     return redirect(url_for("signin"))
-
-  if (user != friend and friend in db["users"] and user in db["users"]
-      and friend in db["users"][user]["friendData"]["blocked"]
-      and user in db["users"][friend]["friendData"]["blockedby"]):
+  
+  if (user != friend and friend in db["users"] and user in db["users"] and friend in db["users"][user]["friendData"]["blocked"] and user in db["users"][friend]["friendData"]["blockedby"]):
     db["users"][user]["friendData"]["blocked"].remove(friend)
     db["users"][friend]["friendData"]["blockedby"].remove(user)
 
-    socketio.emit("frienddata", db["users"][user]["friendData"], room=user)
-    socketio.emit("frienddata", db["users"][friend]["friendData"], room=friend)
+  
+  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  return "ok"
 
 
-@socketio.on("cancelfriendrequest")
-def cancelfriendrequest(friend):
+@app.route("/cancelfriendrequest", methods=["POST", "GET"])
+def cancelfriendrequest():
+  data = request.json
   user = session.get("user")
+  friend = data.get("friendUSR","")
 
   if not user or user == "":
     return redirect(url_for("signin"))
@@ -1090,32 +661,41 @@ def cancelfriendrequest(friend):
     db["users"][user]["friendData"]["outgoing"].remove(friend)
     db["users"][friend]["friendData"]["pending"].remove(user)
 
-    socketio.emit("frienddata", db["users"][user]["friendData"], room=user)
-    socketio.emit("frienddata", db["users"][friend]["friendData"], room=friend)
+  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  return "ok"
 
 
-@socketio.on("acceptfriendrequest")
-def acceptfriendrequest(friend):
+@app.route("/acceptfriendrequest", methods=["POST", "GET"])
+def acceptfriendrequest():
   user = session.get("user")
+  data = request.json
+  socket_id = data.get("socket_id","")
+  friend = data.get("friendUSR","")
+
 
   if not user or user == "":
     return redirect(url_for("signin"))
 
-  if (friend in db["users"][user]["friendData"]["pending"]
-      and user in db["users"][friend]["friendData"]["outgoing"]):
+  if (friend in db["users"][user]["friendData"]["pending"] and user in db["users"][friend]["friendData"]["outgoing"]):
     db["users"][user]["friendData"]["friends"].append(friend)
     db["users"][friend]["friendData"]["friends"].append(user)
 
     db["users"][user]["friendData"]["pending"].remove(friend)
     db["users"][friend]["friendData"]["outgoing"].remove(user)
 
-    socketio.emit("frienddata", db["users"][user]["friendData"], room=user)
-    socketio.emit("frienddata", db["users"][friend]["friendData"], room=friend)
+  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  return "ok"
 
 
-@socketio.on("declinefriendrequest")
-def declinefriendrequest(friend):
+@app.route("/declinefriendrequest", methods=["POST", "GET"])
+def declinefriendrequest():
   user = session.get("user")
+  data = request.json
+  socket_id = data.get("socket_id","")
+  friend = data.get("friendUSR","")
+
 
   if not user or user == "":
     return redirect(url_for("signin"))
@@ -1125,31 +705,10 @@ def declinefriendrequest(friend):
     db["users"][user]["friendData"]["pending"].remove(friend)
     db["users"][friend]["friendData"]["outgoing"].remove(user)
 
-    socketio.emit("frienddata", db["users"][user]["friendData"], room=user)
-    socketio.emit("frienddata", db["users"][friend]["friendData"], room=friend)
+  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  return "ok"
 
-
-@socketio.on("getservers")
-def getServers():
-  user = session.get("user")
-  id = session.get("id")
-
-  if not user or user == "":
-    return
-
-  servers = db["users"][user]["servers"]
-
-  serverData = {}
-
-  for server in servers:
-    serverData[server] = {
-        "owner": db["servers"][str(server)]["owner"],
-        "name": db["servers"][str(server)]["name"],
-        "members": db["servers"][str(server)]["members"],
-        "id": server,
-    }
-
-  socketio.emit("serverData", serverData, room=id)
 
 
 @app.route("/connect",methods=["POST","GET"])
@@ -1162,7 +721,7 @@ def connect():
     # You can also trigger an event back to the client if needed
     pusher_client.trigger(session.get("id"), 'server-to-client', {'message': 'Data received on the server'})
 
-    return "yes"
+    return "ok"
 
 
 def authenticate_channel(name,id):
@@ -1239,7 +798,7 @@ def get_messages():
 
     pusher_client.trigger(socket_id,"messages",db["chatData"][room]["messages"])
 
-    return "d"
+    return "ok"
 
 @app.route('/get-friends', methods=['POST'])
 def get_friends():
@@ -1248,10 +807,11 @@ def get_friends():
     user = session.get("user")
 
     pusher_client.trigger(socket_id,"friends",db["users"][user]["friendData"])
-    return "d"
+    return "ok"
 
-@app.route('/get-server-members', methods=['POST'])
+@app.route('/servermembers', methods=['POST'])
 def get_server_members():
+
     data = request.json
     user = session.get("user")
     id = session.get("id")
@@ -1275,7 +835,8 @@ def get_server_members():
         }
 
         pusher_client.trigger(socket_id,"servermembers",data)
-    return "e"
+        print("s")
+    return "ok"
 
 
 
@@ -1299,7 +860,7 @@ def get_servers():
 
 
     pusher_client.trigger(socket_id,"servers",serverData)
-    return "d"
+    return "ok"
 
 
 
@@ -1357,7 +918,7 @@ def message():
     #pusher_client.trigger(socket_id,"messages",db["chatData"][room]["messages"])
     pusher_client.trigger(room,"message",data)
     print("dfdsafadsfdsa", data)
-    return "d"
+    return "ok"
 
 
 

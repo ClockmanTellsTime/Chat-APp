@@ -194,7 +194,7 @@ function loadServers(data) {
         document.querySelector(".serverMenu").innerHTML += `<button class="serverChat" id="${name}" onclick="selectChat('${name}')">${data[i].name}</button><br><br>`
     
         if (chat == name){
-            sendDataToServer("get-server-members",{
+            sendDataToServer("servermembers",{
                 "socket_id":socket_id,
                 "server_id": data[i].id
             })
@@ -361,7 +361,7 @@ function selectChat(friend) {
     }
     if (String(friend).includes("server")){
         var id = String(friend).split("server-")[1]
-        sendDataToServer("get-server-members",{"socket_id":socket_id,"server_id": id})
+        sendDataToServer("servermembers",{"socket_id":socket_id,"server_id": id})
     }
     
 
