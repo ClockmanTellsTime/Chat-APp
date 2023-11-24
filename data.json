@@ -1,7 +1,7 @@
 {
     "chatData": {
         "global": {
-            "ids": 14,
+            "ids": 16,
             "messages": {
                 "9": {
                     "message": "fdas",
@@ -50,6 +50,22 @@
                     "user": "shaurya",
                     "type": "global",
                     "id": "14"
+                },
+                "15": {
+                    "message": "hi<br>d<br>dd",
+                    "room": "global",
+                    "time": "2023-11-24 22:41:19.334728",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "15"
+                },
+                "16": {
+                    "message": "f<br>dd<br>dd<br>dd<br>d<br>d<br>d<br>d<br>d<br>d<br>d<br>d<br>d<br>d<br>ddddd",
+                    "room": "global",
+                    "time": "2023-11-24 22:41:37.584646",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "16"
                 }
             },
             "type": "global"
@@ -161,9 +177,119 @@
                     "id": "3",
                     "fff_read_at": "2023-11-24 19:49:42.885106",
                     "shaurya_read_at": "2023-11-24 19:49:42.956059"
+                },
+                "45": {
+                    "message": "good!",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:22:28.595875",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "45",
+                    "fff_read_at": "2023-11-24 22:22:28.689340",
+                    "shaurya_read_at": "2023-11-24 22:22:28.595875"
+                },
+                "46": {
+                    "message": "wbu?",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:22:38.723310",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "46",
+                    "fff_read_at": "2023-11-24 22:22:38.786174",
+                    "shaurya_read_at": "2023-11-24 22:22:38.723310"
+                },
+                "47": {
+                    "message": "good as well!",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:22:44.042962",
+                    "user": "fff",
+                    "type": "dm",
+                    "id": "47",
+                    "fff_read_at": "2023-11-24 22:22:44.043969",
+                    "shaurya_read_at": "2023-11-24 22:22:44.114656"
+                },
+                "48": {
+                    "message": "well I gtg!",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:23:01.888795",
+                    "user": "fff",
+                    "type": "dm",
+                    "id": "48",
+                    "fff_read_at": "2023-11-24 22:23:01.888795",
+                    "shaurya_read_at": "2023-11-24 22:24:27.266183"
+                },
+                "49": {
+                    "message": "d",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:24:10.371259",
+                    "user": "fff",
+                    "type": "dm",
+                    "id": "49",
+                    "fff_read_at": "2023-11-24 22:24:10.371259",
+                    "shaurya_read_at": "2023-11-24 22:24:10.436656"
+                },
+                "50": {
+                    "message": "ddd",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:24:24.779396",
+                    "user": "fff",
+                    "type": "dm",
+                    "id": "50",
+                    "fff_read_at": "2023-11-24 22:24:24.779396",
+                    "shaurya_read_at": "2023-11-24 22:24:27.283431"
+                },
+                "51": {
+                    "message": "d",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:24:33.050714",
+                    "user": "fff",
+                    "type": "dm",
+                    "id": "51",
+                    "fff_read_at": "2023-11-24 22:24:33.050714",
+                    "shaurya_read_at": "2023-11-24 22:27:09.078218"
+                },
+                "52": {
+                    "message": "d",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:27:46.048271",
+                    "user": "fff",
+                    "type": "dm",
+                    "id": "52",
+                    "fff_read_at": "2023-11-24 22:27:46.048271",
+                    "shaurya_read_at": "2023-11-24 22:28:01.482191"
+                },
+                "53": {
+                    "message": "f",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:38:42.994556",
+                    "user": "fff",
+                    "type": "dm",
+                    "id": "53",
+                    "fff_read_at": "2023-11-24 22:38:42.994556",
+                    "shaurya_read_at": "2023-11-24 22:38:44.050099"
+                },
+                "54": {
+                    "message": "?",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:38:51.138805",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "54",
+                    "fff_read_at": "2023-11-24 22:38:52.214719",
+                    "shaurya_read_at": "2023-11-24 22:38:51.139810"
+                },
+                "55": {
+                    "message": "\ud83e\udd23",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 22:38:56.175603",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "55",
+                    "fff_read_at": "2023-11-24 22:38:57.291900",
+                    "shaurya_read_at": "2023-11-24 22:38:56.175603"
                 }
             },
-            "ids": 44,
+            "ids": 55,
             "type": "dm",
             "members": [
                 "fff",
@@ -323,7 +449,7 @@
                 "read": 55
             },
             "private-dm-fff2shaurya": {
-                "read": 44
+                "read": 55
             }
         },
         "shauryafadsfasd": {
@@ -355,7 +481,7 @@
         },
         "fff": {
             "private-dm-fff2shaurya": {
-                "read": 44
+                "read": 55
             },
             "rooms": []
         }

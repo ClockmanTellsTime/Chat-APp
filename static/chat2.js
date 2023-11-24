@@ -1,3 +1,4 @@
+
 var pusher = new Pusher('3ee636d6edcdecffe90e', {
     cluster: 'us3',
     encrypted: true,
@@ -63,7 +64,6 @@ pusher.connection.bind('connected', function() {
     })
 
     all_your_accounts.bind("messageread",function(data) {
-        console.log(data)
         if (chat == data.room) {
             if (document.querySelector(".readat") == undefined) {
                 document.querySelector("body > div.mainChat > div.messageFake > div").innerHTML += `<label class='readat self'>read at ${convertTime(data.time)}</label>`
@@ -320,9 +320,10 @@ function loadMessage(data) {
     //hide the read at 
     if (document.querySelector(".readat") != undefined) {
         document.querySelector(".readat").parentNode.removeChild(document.querySelector(".readat"))
-    }
+    }   
 
-    if (String(chat).includes("dm") && data.user == user) {
+
+    if (String(chat).includes("dm") && data.user == user && getOtherUserReadAt(data) != "") {
         if (document.querySelector(".readat") == undefined) {
             document.querySelector("body > div.mainChat > div.messageFake > div").innerHTML += `<label class='readat self'>read at ${convertTime(getOtherUserReadAt(data))}</label>`
         }
@@ -336,10 +337,14 @@ function loadMessage(data) {
 
 
     if (String(data.room).includes("-dm")) {
-        sendDataToServer("read-message",{
-            "socket_id":socket_id,
-            "id": data.id
-        })
+        setTimeout(function(){
+            if (document.querySelector(`#m${String(parseInt(data.id)+1)}`) == undefined && data.user != user) {
+                sendDataToServer("read-message",{
+                    "socket_id":socket_id,
+                    "id": data.id
+                })
+            }
+        },1000)
     }
 }
 
@@ -486,6 +491,14 @@ function addNotification(dm, amount) {
         amount = "99+"
     }
 
+
+    //Make the chat first
+    var cloned = document.querySelector(`#${dm}`).cloneNode(true)
+    var parent = document.querySelector(`#${dm}`).parentNode
+    parent.removeChild(document.querySelector(`#${dm}`))
+    parent.insertBefore(cloned,parent.firstChild)
+
+
     if (document.querySelector(`#${dm} > div.notifications`) != null) {
         document.querySelector(`#${dm} > div.notifications`).innerHTML = amount
     }
@@ -520,6 +533,32 @@ document.querySelector(".send").onclick = () => {
 
 
 
+var typing = false
+var typingSent = false
+var stoppedSent = false
+
+setInterval(function(){
+    if (document.querySelector(".emojionearea-editor").innerHTML!="") {
+        typing = true
+        stoppedSent = false
+    }
+    if (document.querySelector(".emojionearea-editor").innerHTML=="") {
+        typing = false
+        typingSent = false
+    }
+
+    if (typing && typingSent == false) {
+        typingSent = true
+        console.log("typing sent")
+    }
+
+    if (typing == false && stoppedSent == false) {
+        stoppedSent = true
+        console.log("stopped sent")
+    }
+
+},500)
+
 
 
 
@@ -535,11 +574,7 @@ setTimeout(function() {
         
         if (e.key.toLowerCase() == "enter" && e.shiftKey) {
             e.preventDefault();
-            document.querySelector(".emojionearea-editor").innerHTML += "<br>"
-            //document.querySelector(".emojionearea-editor").selectionEnd = document.querySelector(".emojionearea-editor").innerHTML.length
-            var input = document.querySelector(".emojionearea-editor")
-            input.focus();
-            input.setSelectionRange(input.value.length, input.value.length);
+            document.querySelector(".emojionearea-editor").innerHTML += "<br><br>   "
         }
     })
 },100)
@@ -556,12 +591,12 @@ function leastAlphabeticalOrder(word1, word2) {
 }
 
 
-function getOtherUserReadAt(data, currentUser) {
+function getOtherUserReadAt(data) {
     // Get the keys of the data object
     const keys = Object.keys(data);
   
     // Find the key that contains the other user's name
-    const otherUserKey = keys.find(key => key !== 'message' && key !== 'room' && key !== 'time' && key !== 'user' && key !== 'type' && key !== 'id' && key.includes('_read_at') && !key.includes(currentUser));
+    const otherUserKey = keys.find(key => key !== 'message' && key !== 'room' && key !== 'time' && key !== 'user' && key !== 'type' && key !== 'id' && key.includes('_read_at') && !key.includes(user));
   
     if (otherUserKey) {
       const otherUserName = otherUserKey.split('_')[0];

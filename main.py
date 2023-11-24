@@ -204,7 +204,7 @@ def createserver():
     db["servers"][id] = {"members": [user], "name": name, "owner": user}
 
     db["users"][user]["servers"].append(id)
-
+    writeDB(db)
     return redirect(url_for("join"))
 
   return render_template("createserver.html", r="")
@@ -344,6 +344,7 @@ def signup():
       session["user"] = usr
 
       session["id"] = usr + str(random.randint(1, 1000000000000000))
+      writeDB(db)
       return redirect(url_for("join"))
 
   return render_template("signup.html", r="")
@@ -515,6 +516,8 @@ def configure(id):
 
         pusher_client.trigger(member,"servermembers",data)
 
+
+  writeDB(db)
   if str(id) in db["servers"].keys():
     if user == db["servers"][str(id)]["owner"]:
       return render_template("configure.html",server=db["servers"][str(id)]["name"],id=id)
@@ -551,6 +554,7 @@ def leave(id):
 
     pusher_client.trigger(member,"servermembers",data)
 
+  writeDB(db)
   return redirect(url_for("join"))
 
 
@@ -586,6 +590,7 @@ def friendrequest():
 
   pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  writeDB(db)
   return "ok"
 
 
@@ -629,6 +634,7 @@ def blockuser():
 
   pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  writeDB(db)
   return "ok"
 
 
@@ -649,7 +655,7 @@ def removefriend():
 
   pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
-
+  writeDB(db)
   return "ok"
 
 
@@ -671,6 +677,7 @@ def unblockuser():
   
   pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  writeDB(db)
   return "ok"
 
 
@@ -690,6 +697,7 @@ def cancelfriendrequest():
 
   pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  writeDB(db)
   return "ok"
 
 
@@ -713,6 +721,7 @@ def acceptfriendrequest():
 
   pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  writeDB(db)
   return "ok"
 
 
@@ -734,6 +743,7 @@ def declinefriendrequest():
 
   pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  writeDB(db)
   return "ok"
 
 
@@ -826,7 +836,7 @@ def get_messages():
       }
 
     pusher_client.trigger(socket_id,"messages",db["chatData"][room]["messages"])
-
+    writeDB(db)
     return "ok"
 
 @app.route('/get-friends', methods=['POST'])
@@ -857,7 +867,7 @@ def get_friends():
             pusher_client.trigger(user,"dm",data)
 
 
-    
+    writeDB(db)
     return "ok"
 
 @app.route('/servermembers', methods=['POST'])
@@ -886,7 +896,7 @@ def get_server_members():
         }
 
         pusher_client.trigger(socket_id,"servermembers",data)
-
+    writeDB(db)
     return "ok"
 
 
@@ -911,6 +921,7 @@ def get_servers():
 
 
     pusher_client.trigger(socket_id,"servers",serverData)
+    writeDB(db)
     return "ok"
 
 
@@ -1007,6 +1018,7 @@ def message():
 
     data = db["chatData"][room]["messages"][id]
     pusher_client.trigger(room,"message",data)
+    writeDB(db)
     return "ok"
 
 
@@ -1017,8 +1029,6 @@ def read_message():
     room = session.get("room")
     id = str(data.get("id",""))
     socket_id = data.get("socket_id","")
-
-    print(id,socket_id,user)
 
     #make sure room is a dm
     if not "dm" in str(room):
@@ -1044,7 +1054,7 @@ def read_message():
           "id": id,
       }
       pusher_client.trigger(other_user,"messageread",data)
-      
+    writeDB(db)
     return "ok"
 
 
