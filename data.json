@@ -161,39 +161,9 @@
                     "id": "3",
                     "fff_read_at": "2023-11-24 19:49:42.885106",
                     "shaurya_read_at": "2023-11-24 19:49:42.956059"
-                },
-                "4": {
-                    "message": "good!",
-                    "room": "private-dm-fff2shaurya",
-                    "time": "2023-11-24 19:50:01.100863",
-                    "user": "shaurya",
-                    "type": "dm",
-                    "id": "4",
-                    "fff_read_at": "2023-11-24 19:50:01.158266",
-                    "shaurya_read_at": "2023-11-24 19:50:01.100863"
-                },
-                "5": {
-                    "message": "fads",
-                    "room": "private-dm-fff2shaurya",
-                    "time": "2023-11-24 19:55:04.924931",
-                    "user": "shaurya",
-                    "type": "dm",
-                    "id": "5",
-                    "fff_read_at": "2023-11-24 19:55:04.984101",
-                    "shaurya_read_at": "2023-11-24 19:55:04.924931"
-                },
-                "6": {
-                    "message": "fads",
-                    "room": "private-dm-fff2shaurya",
-                    "time": "2023-11-24 19:55:05.533094",
-                    "user": "shaurya",
-                    "type": "dm",
-                    "id": "6",
-                    "fff_read_at": "2023-11-24 19:55:05.592665",
-                    "shaurya_read_at": "2023-11-24 19:55:05.533094"
                 }
             },
-            "ids": 6,
+            "ids": 44,
             "type": "dm",
             "members": [
                 "fff",
@@ -353,7 +323,7 @@
                 "read": 55
             },
             "private-dm-fff2shaurya": {
-                "read": 6
+                "read": 44
             }
         },
         "shauryafadsfasd": {
@@ -385,7 +355,7 @@
         },
         "fff": {
             "private-dm-fff2shaurya": {
-                "read": 6
+                "read": 44
             },
             "rooms": []
         }

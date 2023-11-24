@@ -19,20 +19,13 @@ pusher.connection.bind('connected', function() {
     only_you_channel.bind("messages",function(data) {
         document.querySelector(".messages").innerHTML = ""
         message_ids = []
-
-
-        console.log(data)
-
         if (Object.keys(data).length == 0) {
             document.querySelector(".messages").innerHTML = "No Messages!"
             return
         }
-
         for (var i in data) {
-            console.log(data[i])
             loadMessage(data[i])
         }
-
         document.querySelector(".messages").scrollTo(0, document.querySelector(".messages").scrollHeight);
     })
 
@@ -64,11 +57,25 @@ pusher.connection.bind('connected', function() {
     })
 
     all_your_accounts.bind("dm",function(data) {
-        console.log("dd")
         if (data["user"] == formatFriendName(chat)) {return false}
         if (data["amount"] == 0) {return false}
-        console.log(data.user,data.amount)
         addNotification(data["user"], data["amount"])
+    })
+
+    all_your_accounts.bind("messageread",function(data) {
+        console.log(data)
+        if (chat == data.room) {
+            if (document.querySelector(".readat") == undefined) {
+                document.querySelector("body > div.mainChat > div.messageFake > div").innerHTML += `<label class='readat self'>read at ${convertTime(data.time)}</label>`
+            }
+            else {
+                document.querySelector(".readat").parentNode.removeChild(document.querySelector(".readat"))
+                document.querySelector("body > div.mainChat > div.messageFake > div").innerHTML += `<label class='readat self'>read at ${convertTime(data.time)}</label>`
+            }
+        }
+
+        document.querySelector(".messages").scrollTo(0, document.querySelector(".messages").scrollHeight);
+
     })
 
 
@@ -83,7 +90,6 @@ pusher.connection.bind('connected', function() {
 function joinChat(name) {
     pusher.unsubscribe(chat)
     var chat_ = pusher.subscribe(name);
-    console.log(name)
 
     chat_.bind('pusher:subscription_error', function(status) {
         if (status.status === 403) {
@@ -97,7 +103,6 @@ function joinChat(name) {
             document.querySelector(".messages").innerHTML = ""
         }
         loadMessage(data)
-        console.log(data)
     })
 
     if (name == "global") {
@@ -227,7 +232,6 @@ function convertTime(inputTime) {
       return Math.ceil((daysSinceStart + startOfYear.getDay() + 1) / 7);
     }
 
-    console.log(getWeekNumber(inputLocalTime))
   
     // Function to format time
     function formatTime(date) {
@@ -298,7 +302,7 @@ function loadMessage(data) {
 
     else if (data.user == user) {
         document.querySelector(".messages").innerHTML += `
-        <div class="messageBox self">
+        <div class="messageBox self" id="m${data.id}">
             <label class='messageLabel'><span class="messageText">${data.message.replace(/&lt;br&gt;/g, '<br>').replace(/&lt;\/div&gt;/g, '</div>').replace(/&lt;div&gt;/g, '<div>')}</span></label><br><br>
         </div>`
     }
@@ -306,10 +310,26 @@ function loadMessage(data) {
 
     else {
         document.querySelector(".messages").innerHTML += `
-        <div class="messageBox">
+        <div class="messageBox" id="m${data.id}">
             <label>${data.user}  ${data.time}</label><br>
             <label class='messageLabel'><span class="messageText">${data.message.replace(/&lt;br&gt;/g, '<br>').replace(/&lt;\/div&gt;/g, '</div>').replace(/&lt;div&gt;/g, '<div>')}</span></label><br><br>
         </div>`
+    }
+
+
+    //hide the read at 
+    if (document.querySelector(".readat") != undefined) {
+        document.querySelector(".readat").parentNode.removeChild(document.querySelector(".readat"))
+    }
+
+    if (String(chat).includes("dm") && data.user == user) {
+        if (document.querySelector(".readat") == undefined) {
+            document.querySelector("body > div.mainChat > div.messageFake > div").innerHTML += `<label class='readat self'>read at ${convertTime(getOtherUserReadAt(data))}</label>`
+        }
+        else {
+            document.querySelector(".readat").parentNode.removeChild(document.querySelector(".readat"))
+            document.querySelector("body > div.mainChat > div.messageFake > div").innerHTML += `<label class='readat self'>read at ${convertTime(getOtherUserReadAt(data))}</label>`
+        }
     }
     
     document.querySelector(".messages").scrollTo(0, document.querySelector(".messages").scrollHeight);
@@ -394,13 +414,16 @@ function sendMessage() {
         socket_id: socket_id
     })
 
+    if (document.querySelector(".readat") != undefined){
+        document.querySelector(".readat").parentNode.removeChild(document.querySelector(".readat"))
+    }
+
 }
 
 
 
 function selectChat(friend) {
     document.querySelector(".messages").innerHTML = "Loading messages..."
-    console.log(friend)
     joinChat(friend)
     chat = friend
 
@@ -531,3 +554,21 @@ function leastAlphabeticalOrder(word1, word2) {
     const sortedWords = [word1, word2].sort();
     return sortedWords[1]; // Returns the word that comes first alphabetically
 }
+
+
+function getOtherUserReadAt(data, currentUser) {
+    // Get the keys of the data object
+    const keys = Object.keys(data);
+  
+    // Find the key that contains the other user's name
+    const otherUserKey = keys.find(key => key !== 'message' && key !== 'room' && key !== 'time' && key !== 'user' && key !== 'type' && key !== 'id' && key.includes('_read_at') && !key.includes(currentUser));
+  
+    if (otherUserKey) {
+      const otherUserName = otherUserKey.split('_')[0];
+      const otherUserReadAt = data[otherUserKey];
+      return  otherUserReadAt
+    } else {
+      return null; // Return null if the other user's read_at value is not found
+    }
+  }
+  

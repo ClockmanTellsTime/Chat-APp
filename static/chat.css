@@ -317,7 +317,6 @@ body {
 }
 
 
-
 .messageLabel {
     display: inline-block; /* Ensure the label's width is based on its content */
     background-color: rgb(0, 162, 255);
@@ -348,6 +347,10 @@ body {
     margin-right: auto;
     padding: 8px 12px;
     border-radius: 10px;
+  }
+
+  label.self {
+    margin-left: auto;
   }
 
 

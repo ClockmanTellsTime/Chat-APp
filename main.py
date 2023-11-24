@@ -1020,11 +1020,31 @@ def read_message():
 
     print(id,socket_id,user)
 
+    #make sure room is a dm
+    if not "dm" in str(room):
+        return "ok"
+
     #update time read and amount of messages read!
     if db["chatData"][room]["messages"][id][user+"_read_at"] == "":
       db["chatData"][room]["messages"][id][user+"_read_at"] = str(datetime.utcnow())
       db["userdata"][user][room]["read"] = db["chatData"][room]["ids"]
 
+
+      username1, username2 = get_usernames(room)
+
+      other_user = ""
+      if user == username1:
+          other_user = username2
+      else:
+          other_user = username1
+      
+      data = {
+          "time":db["chatData"][room]["messages"][id][user+"_read_at"],
+          "room": room,
+          "id": id,
+      }
+      pusher_client.trigger(other_user,"messageread",data)
+      
     return "ok"
 
 
