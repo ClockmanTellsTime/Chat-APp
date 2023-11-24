@@ -44,13 +44,7 @@
 
             document.querySelector(".ahh").onsubmit = (e) => {
                 e.preventDefault()
-    
                 document.querySelector(".usr").value = String(document.querySelector(".usr").value).trim()
-    
-                var pass = document.querySelector(".pass")
-    
-                pass.value = sha224(sha256(md5(sha224(sha256(md5(pass.value))))))
-                
                 document.querySelector(".ahh").submit()
             }
         </script>

@@ -113,11 +113,6 @@
         }
 
     </style>
-
-    <script>
-        var user = '{{session.get("user")}}'
-
-    </script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 </head>
 <body>
@@ -154,6 +149,8 @@
 </html>
 
 <script defer>  
+    var user = '{{session.get("user")}}'
+
     var pusher = new Pusher('3ee636d6edcdecffe90e', {
         cluster: 'us3',
         encrypted: true,
@@ -195,6 +192,8 @@
             body: JSON.stringify(data),
         })
     }
+
+    
 
 
 

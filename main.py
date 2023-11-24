@@ -3,6 +3,9 @@ import json
 import random
 from bs4 import BeautifulSoup
 import pusher
+from datetime import datetime
+import hashlib
+import string
 
 deleted = False
 admins = ["shaurya", "lilnasxbiggestfan"]
@@ -15,6 +18,11 @@ pusher_client = pusher.Pusher(
   ssl=True
 )
 
+
+import json
+import re
+
+
 def openDB():
   with open("data.json", 'r') as f:
     data = json.load(f)
@@ -22,11 +30,10 @@ def openDB():
   return data
 
 
+
 def writeDB(data):
   with open("data.json", 'w') as f:
     json.dump(data, f, indent=4)
-
-  print("sent")
 
 
 app = Flask(__name__)
@@ -41,12 +48,47 @@ for user in db["userdata"]:
   db["userdata"][user]["rooms"] = []
 
 
+
 def is_html(input_str):
-  try:
-    soup = BeautifulSoup(input_str, "html.parser")
-    return any(soup.find_all(True))
-  except:
-    return False
+    input_str = str(input_str).replace("&lt;","<").replace("&gt;",">")
+    try:
+        soup = BeautifulSoup(input_str, "html.parser")
+        return any(tag.name != 'br' and tag.name != 'div' for tag in soup.find_all(True))
+    except:
+        return False
+
+def hash_string(string_to_hash):
+    # Encode the string to bytes before hashing
+    encoded_string = string_to_hash.encode('utf-8')
+    
+    # Create a hash object using SHA-256 algorithm
+    hasher = hashlib.sha256()
+    
+    # Update the hash object with the encoded string
+    hasher.update(encoded_string)
+    
+    # Get the hexadecimal representation of the hash
+    hashed_string = hasher.hexdigest()
+    
+    return hashed_string
+
+def generate_random_string():
+    # Define the characters to choose from for the random string
+    characters = string.digits  # Use digits for a 10-digit string
+    
+    # Generate a random 10-character string
+    random_string = ''.join(random.choice(characters) for _ in range(10))
+    
+    return random_string
+
+def most_alphabetical_order(word1, word2):
+    sorted_words = sorted([word1, word2])
+    return sorted_words[0]  # Returns the word that comes last alphabetically
+
+def least_alphabetical_order(word1, word2):
+    sorted_words = sorted([word1, word2])
+    return sorted_words[1]  
+
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -58,9 +100,6 @@ def join():
 
   if not user or user == "":
     return redirect(url_for("signin"))
-
-  if deleted:
-    return render_template("index.html")
 
   return render_template("chat.html")
 
@@ -183,7 +222,8 @@ def signup():
 
   elif request.method == "POST":
     usr = request.form.get("usr")
-    password = request.form.get("pass")
+    salt = generate_random_string()
+    password = hash_string(request.form.get("pass") + salt)
 
     letters = [
         "A",
@@ -287,6 +327,7 @@ def signup():
       db["users"][usr] = {
           "usr": usr,
           "password": password,
+          "salt": salt,
           "admin": False,
           "friendData": {
               "friends": [],
@@ -317,7 +358,8 @@ def signin():
 
   if request.method == "POST":
     usr = request.form.get("usr")
-    password = request.form.get("pass")
+    password = hash_string(request.form.get("pass"))
+    
 
     if usr == "":
       return render_template("signin.html", r="You must have a username...")
@@ -326,6 +368,10 @@ def signin():
       return render_template("signin.html", r="You must have a password...")
 
     if usr in db["users"].keys():
+      
+      salt = db["users"][usr]["salt"]
+      password = hash_string(request.form.get("pass") + salt)
+
       if db["users"][usr]["banned"]:
         return render_template("banned.html", usr=usr)
 
@@ -695,12 +741,12 @@ def declinefriendrequest():
 @app.route("/connect",methods=["POST","GET"])
 def connect():
     data = request.json
-    event_type = data.get('event_type', '')
     socketid = data.get('socketId', '')
     url = data.get("url","")
 
-    # You can also trigger an event back to the client if needed
-    pusher_client.trigger(socketid, 'server-to-client', {'message': 'Data received on the server'})
+    session["url"] = url
+    session["socketid"] = socketid
+
     print(session.get("user") + " has connected at " + url)
 
     return "ok"
@@ -751,20 +797,13 @@ def get_messages():
     if not room in db["chatData"]:
 
         if "server" in str(room):
-            for server in db["servers"]:
-                if server == "servers":
-                    continue
-
-                id = room[15:len(room)]
-
-
-                if str(id) in db["servers"]:
-                    db["chatData"][room] = {
-                        "messages": {},
-                        "ids": 0,
-                        "type": "groupchat",
-                        "members": db["servers"][server]["members"],
-                    }
+            if str(id) in db["servers"]:
+                db["chatData"][room] = {
+                    "messages": {},
+                    "ids": 0,
+                    "type": "groupchat",
+                    "members": db["servers"][str(id)]["members"],
+                }
         else:
             db["chatData"][room] = {
                 "messages": {},
@@ -774,6 +813,17 @@ def get_messages():
             }
 
 
+    if "-dm" in str(room):
+      #update messages read in that thing
+      if not user in db["userdata"]:
+        db["userdata"][user] = {}
+
+      if not room in db["userdata"][user]:
+        db["userdata"][user][room] = {}
+
+      db["userdata"][user][room] = {
+          "read": db["chatData"][room]["ids"]
+      }
 
     pusher_client.trigger(socket_id,"messages",db["chatData"][room]["messages"])
 
@@ -786,6 +836,28 @@ def get_friends():
     user = session.get("user")
 
     pusher_client.trigger(socket_id,"friends",db["users"][user]["friendData"])
+
+
+    #show all dms!
+    for friend in db["users"][user]["friendData"]["friends"]:
+        room = "private-dm-" + most_alphabetical_order(user,friend) + "2"+least_alphabetical_order(user,friend)
+        
+        if room in db["chatData"]:
+            if not user in db["userdata"]:
+                db["userdata"][user] = {}
+
+            if not room in db["userdata"][user]:
+                db["userdata"][user][room] = {"read":0}
+
+            data = {
+                "user": room,
+                "amount": db["chatData"][room]["ids"] - db["userdata"][user][room]["read"]
+            }
+
+            pusher_client.trigger(user,"dm",data)
+
+
+    
     return "ok"
 
 @app.route('/servermembers', methods=['POST'])
@@ -850,7 +922,8 @@ def message():
     user = session.get("user")
     room = session.get("room")
     message = data.get("message","")
-    time = data.get("time","")
+    
+    time = str(datetime.utcnow())
 
     if not user or user == "":
         return False
@@ -859,28 +932,28 @@ def message():
         return False
 
     if message == "":
-        return
+        return 'ok'
 
     if is_html(message):
-        return
+        
+        return 'ok'
 
-    if len(message) > 1000:
-        return
+    if len(message) > 2500:
+        return 'ok'
 
     if not room in db["chatData"]:
-        db["chatData"][room] = {"messages": {}, "ids": 0}
+        db["chatData"][room] = {"messages": {}, "ids": 0,"members":[]}
+        if "dm" in room:
+          db["chatData"][room]["type"] = "dm"
+        if "server" in room:
+          db["chatData"][room]["type"] = "server"
+
 
     db["chatData"][room]["ids"] += 1
 
     id = str(db["chatData"][room]["ids"])
 
     db["chatData"][room]["messages"][id] = {
-        "message": message,
-        "time": time,
-        "user": user
-    }
-
-    data = {
         "message": message,
         "room": room,
         "time": time,
@@ -889,16 +962,70 @@ def message():
         "id": id
     }
 
-    if "server_" in str(room):
-        data["servername"] = db["servers"][room[15:len(room)]]["name"]
-    
-    #pusher_client.trigger(socket_id,"messages",db["chatData"][room]["messages"])
-    pusher_client.trigger(room,"message",data)
 
+    if "server" in str(room):
+        db["chatData"][room]["messages"][id]["servername"] = db["servers"][room[15:len(room)]]["name"]
+
+    if "-dm" in str(room):
+        username1, username2 = get_usernames(room)
+
+        db["chatData"][room]["messages"][id][username1+"_read_at"] = ""
+        db["chatData"][room]["messages"][id][username2+"_read_at"] = ""
+
+        db["chatData"][room]["messages"][id][user+"_read_at"] = str(datetime.utcnow())
+
+        other_user = ""
+        if user == username1:
+            other_user = username2
+        else:
+            other_user = username1
+
+        
+
+        if not user in db["userdata"]:
+            db["userdata"][user] = {}
+
+        db["userdata"][user][room] = {
+            "read": db["chatData"][room]["ids"]
+        }
+
+        if not other_user in db["userdata"]:
+            db["userdata"][other_user] = {}
+
+        if not room in db["userdata"][other_user]:
+            db["userdata"][other_user][room] = {
+                "read": 0
+            }
+
+        data = {
+            "user": room,
+            "amount": db["chatData"][room]["ids"] - db["userdata"][other_user][room]["read"]
+        }
+
+        pusher_client.trigger(other_user,"dm",data)
+
+
+    data = db["chatData"][room]["messages"][id]
+    pusher_client.trigger(room,"message",data)
     return "ok"
 
 
+@app.route('/read-message', methods=['POST'])
+def read_message():
+    data = request.json
+    user = session.get("user")
+    room = session.get("room")
+    id = str(data.get("id",""))
+    socket_id = data.get("socket_id","")
 
+    print(id,socket_id,user)
+
+    #update time read and amount of messages read!
+    if db["chatData"][room]["messages"][id][user+"_read_at"] == "":
+      db["chatData"][room]["messages"][id][user+"_read_at"] = str(datetime.utcnow())
+      db["userdata"][user][room]["read"] = db["chatData"][room]["ids"]
+
+    return "ok"
 
 
 

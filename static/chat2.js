@@ -18,38 +18,19 @@ pusher.connection.bind('connected', function() {
 
     only_you_channel.bind("messages",function(data) {
         document.querySelector(".messages").innerHTML = ""
-        
-
-        for (var i in data) {
+        message_ids = []
 
 
-            data[i].message = linksAndImages(data[i].message)
-            
+        console.log(data)
 
-            if (blocked.includes(data[i].user)) {
-                document.querySelector(".messages").innerHTML += "<label class='blocked'>"+data[i].user + "  " + data[i].time+"</label><br>"
-                document.querySelector(".messages").innerHTML += `<label class='messageText'><button onclick="this.parentElement.innerHTML = '${data[i].message}' ">Show message</button></label><br><br>`
-            }
-        
-            else if (data[i].user == user) {
-                document.querySelector(".messages").innerHTML += `
-                <div class="messageBox self">
-                    <label class='messageLabel'><span class="messageText">${data[i].message}</span></label><br><br>
-                </div>`
-            }
-        
-            else {
-                document.querySelector(".messages").innerHTML += `
-                <div class="messageBox">
-                    <label class='userLabel'><span class="messageText">${data[i].user}  ${data[i].time}</span></label>
-
-                    <label class='messageLabel'><span class="messageText">${data[i].message}</span></label>
-                </div>`
-            }
+        if (Object.keys(data).length == 0) {
+            document.querySelector(".messages").innerHTML = "No Messages!"
+            return
         }
 
-        if (document.querySelector(".messages").innerHTML == "") {
-            document.querySelector(".messages").innerHTML = "No messages!"
+        for (var i in data) {
+            console.log(data[i])
+            loadMessage(data[i])
         }
 
         document.querySelector(".messages").scrollTo(0, document.querySelector(".messages").scrollHeight);
@@ -83,9 +64,10 @@ pusher.connection.bind('connected', function() {
     })
 
     all_your_accounts.bind("dm",function(data) {
+        console.log("dd")
         if (data["user"] == formatFriendName(chat)) {return false}
         if (data["amount"] == 0) {return false}
-    
+        console.log(data.user,data.amount)
         addNotification(data["user"], data["amount"])
     })
 
@@ -111,7 +93,11 @@ function joinChat(name) {
     });
 
     chat_.bind("message",function(data) {
+        if (document.querySelector(".messages").innerHTML == "No Messages!") {
+            document.querySelector(".messages").innerHTML = ""
+        }
         loadMessage(data)
+        console.log(data)
     })
 
     if (name == "global") {
@@ -178,7 +164,6 @@ function loadFriends(data) {
         document.querySelector(".friendsMenu").innerHTML += `<div class="notifications">${friendRequests}</div>`
     }
 }
-
 function loadServers(data) {
     
 
@@ -227,6 +212,64 @@ function loadServerMembers(data) {
     } 
 }
 
+function convertTime(inputTime) {
+    const inputDate = new Date(inputTime);
+    const now = new Date();
+    const currentOffset = now.getTimezoneOffset() * 60000; // Timezone offset in milliseconds
+  
+    // Convert input time to local time
+    const inputLocalTime = new Date(inputDate.getTime() - currentOffset);
+  
+    // Function to get the week number
+    function getWeekNumber(date) {
+      const startOfYear = new Date(date.getFullYear(), 0, 1);
+      const daysSinceStart = (date - startOfYear) / (24 * 60 * 60 * 1000);
+      return Math.ceil((daysSinceStart + startOfYear.getDay() + 1) / 7);
+    }
+
+    console.log(getWeekNumber(inputLocalTime))
+  
+    // Function to format time
+    function formatTime(date) {
+      return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    }
+  
+    // Function to format date
+    function formatDateFull(date) {
+      return date.toLocaleDateString([], {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+      });
+    }
+
+    function formatDayAndTime(date) {
+        return date.toLocaleDateString([], {
+          weekday: 'long',
+        });
+      }
+  
+    // Same day
+    if (
+      inputLocalTime.getDate() === now.getDate() &&
+      getWeekNumber(inputLocalTime) === getWeekNumber(now) &&
+      inputLocalTime.getFullYear() === now.getFullYear()
+    ) {
+      return formatTime(inputLocalTime);
+    }
+  
+    // Same week
+    if (
+      getWeekNumber(inputLocalTime) === getWeekNumber(now) &&
+      inputLocalTime.getFullYear() === now.getFullYear()
+    ) {
+      return formatDayAndTime(inputLocalTime) + " " + formatTime(inputLocalTime);
+    }
+  
+    return inputLocalTime.toLocaleDateString();
+  }
+
+  
 
 var message_ids = []
 
@@ -236,6 +279,8 @@ function loadMessage(data) {
     if (message_ids.includes(data.id)) {return}
 
     message_ids.push(data.id)
+
+    data.time = convertTime(data.time)
 
     data.message = linksAndImages(data.message)
 
@@ -248,13 +293,13 @@ function loadMessage(data) {
 
     if (blocked.includes(data.user)) {
         document.querySelector(".messages").innerHTML += "<label class='blocked'>"+data.user + "  " + data.time+"</label><br>"
-        document.querySelector(".messages").innerHTML += `<label class='messageText'><button onclick="this.parentElement.innerHTML = '${data.message}' ">Show message</button></label><br><br>`
+        document.querySelector(".messages").innerHTML += `<label class='messageText'><button onclick="this.parentElement.innerHTML = '${data.message.replace(/&lt;br&gt;/g, '<br>').replace(/&lt;\/div&gt;/g, '</div>').replace(/&lt;div&gt;/g, '<div>')}' ">Show message</button></label><br><br>`
     }
 
     else if (data.user == user) {
         document.querySelector(".messages").innerHTML += `
         <div class="messageBox self">
-            <label class='messageLabel'><span class="messageText">${data.message}</span></label><br><br>
+            <label class='messageLabel'><span class="messageText">${data.message.replace(/&lt;br&gt;/g, '<br>').replace(/&lt;\/div&gt;/g, '</div>').replace(/&lt;div&gt;/g, '<div>')}</span></label><br><br>
         </div>`
     }
 
@@ -263,11 +308,19 @@ function loadMessage(data) {
         document.querySelector(".messages").innerHTML += `
         <div class="messageBox">
             <label>${data.user}  ${data.time}</label><br>
-            <label class='messageLabel'><span class="messageText">${data.message}</span></label><br><br>
+            <label class='messageLabel'><span class="messageText">${data.message.replace(/&lt;br&gt;/g, '<br>').replace(/&lt;\/div&gt;/g, '</div>').replace(/&lt;div&gt;/g, '<div>')}</span></label><br><br>
         </div>`
     }
-
+    
     document.querySelector(".messages").scrollTo(0, document.querySelector(".messages").scrollHeight);
+
+
+    if (String(data.room).includes("-dm")) {
+        sendDataToServer("read-message",{
+            "socket_id":socket_id,
+            "id": data.id
+        })
+    }
 }
 
 
@@ -333,17 +386,11 @@ function linksAndImages(inputString) {
 
 
 function sendMessage() {
-    var message = String(document.querySelector(".message").value.trim())
-    var time = new Date().toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")
-
+    var message = replaceImageTagsWithEmoji(document.querySelector(".emojionearea-editor").innerHTML)
     document.querySelector(".emojionearea-editor").innerHTML
-
     document.querySelector(".emojionearea-editor").innerHTML = ""
-    document.querySelector(".message").value = ""
-
     sendDataToServer("message",{
         message: message,
-        time: time,
         socket_id: socket_id
     })
 
@@ -459,16 +506,17 @@ setTimeout(function() {
 
         if (e.key.toLowerCase() == "enter" && e.ctrlKey) {
             e.preventDefault();
-            var message = replaceImageTagsWithEmoji(document.querySelector(".emojionearea-editor").innerHTML)
-            var time = new Date().toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")
+            sendMessage()
+        }
+
         
-            document.querySelector(".emojionearea-editor").innerHTML = ""
-        
-            sendDataToServer("message",{
-                message: message,
-                time: time,
-                socket_id: socket_id
-            })
+        if (e.key.toLowerCase() == "enter" && e.shiftKey) {
+            e.preventDefault();
+            document.querySelector(".emojionearea-editor").innerHTML += "<br>"
+            //document.querySelector(".emojionearea-editor").selectionEnd = document.querySelector(".emojionearea-editor").innerHTML.length
+            var input = document.querySelector(".emojionearea-editor")
+            input.focus();
+            input.setSelectionRange(input.value.length, input.value.length);
         }
     })
 },100)

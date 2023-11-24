@@ -1,8 +1,57 @@
 {
     "chatData": {
         "global": {
-            "ids": 4,
-            "messages": {},
+            "ids": 14,
+            "messages": {
+                "9": {
+                    "message": "fdas",
+                    "room": "global",
+                    "time": "2023-11-24 01:17:03.426267",
+                    "user": "shaurya#",
+                    "type": "global",
+                    "id": "9"
+                },
+                "10": {
+                    "message": "fff",
+                    "room": "global",
+                    "time": "2023-11-24 01:17:12.353586",
+                    "user": "shaurya#",
+                    "type": "global",
+                    "id": "10"
+                },
+                "11": {
+                    "message": "hi",
+                    "room": "global",
+                    "time": "2023-11-24 01:30:45.510321",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "11"
+                },
+                "12": {
+                    "message": "wassup",
+                    "room": "global",
+                    "time": "2023-11-24 01:30:47.901793",
+                    "user": "fff",
+                    "type": "global",
+                    "id": "12"
+                },
+                "13": {
+                    "message": "ddfsasd",
+                    "room": "global",
+                    "time": "2023-11-24 01:30:55.078504",
+                    "user": "fff",
+                    "type": "global",
+                    "id": "13"
+                },
+                "14": {
+                    "message": "fdas",
+                    "room": "global",
+                    "time": "2023-11-24 01:30:56.958414",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "14"
+                }
+            },
             "type": "global"
         },
         "private-lilnasxbiggestfan2shaurya": {
@@ -73,16 +122,91 @@
                 "Nolan",
                 "shaurya"
             ]
+        },
+        "server_678": {
+            "messages": {},
+            "ids": 0,
+            "members": [
+                "shaurya"
+            ]
+        },
+        "private-dm-fff2shaurya": {
+            "messages": {
+                "1": {
+                    "message": "hi",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 19:45:01.341210",
+                    "user": "fff",
+                    "type": "dm",
+                    "id": "1",
+                    "fff_read_at": "2023-11-24 19:49:37.909121",
+                    "shaurya_read_at": "2023-11-24 19:49:31.782744"
+                },
+                "2": {
+                    "message": "hi",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 19:49:34.819687",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "2",
+                    "fff_read_at": "2023-11-24 19:49:35.953009",
+                    "shaurya_read_at": "2023-11-24 19:49:34.819687"
+                },
+                "3": {
+                    "message": "how are you doing?",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 19:49:42.885106",
+                    "user": "fff",
+                    "type": "dm",
+                    "id": "3",
+                    "fff_read_at": "2023-11-24 19:49:42.885106",
+                    "shaurya_read_at": "2023-11-24 19:49:42.956059"
+                },
+                "4": {
+                    "message": "good!",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 19:50:01.100863",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "4",
+                    "fff_read_at": "2023-11-24 19:50:01.158266",
+                    "shaurya_read_at": "2023-11-24 19:50:01.100863"
+                },
+                "5": {
+                    "message": "fads",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 19:55:04.924931",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "5",
+                    "fff_read_at": "2023-11-24 19:55:04.984101",
+                    "shaurya_read_at": "2023-11-24 19:55:04.924931"
+                },
+                "6": {
+                    "message": "fads",
+                    "room": "private-dm-fff2shaurya",
+                    "time": "2023-11-24 19:55:05.533094",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "6",
+                    "fff_read_at": "2023-11-24 19:55:05.592665",
+                    "shaurya_read_at": "2023-11-24 19:55:05.533094"
+                }
+            },
+            "ids": 6,
+            "type": "dm",
+            "members": [
+                "fff",
+                "shaurya"
+            ]
         }
     },
     "servers": {
         "678": {
             "members": [
-                "shaurya",
-                "BBC",
-                "Blaek"
+                "shaurya"
             ],
-            "name": "lg",
+            "name": "yug76g67tg76r5d",
             "owner": "shaurya"
         },
         "servers": 678
@@ -227,6 +351,9 @@
             },
             "shauryaTOlilnasxbiggestfan": {
                 "read": 55
+            },
+            "private-dm-fff2shaurya": {
+                "read": 6
             }
         },
         "shauryafadsfasd": {
@@ -253,6 +380,12 @@
         "what": {
             "lilnasxbiggestfanTOwhat": {
                 "read": 5
+            },
+            "rooms": []
+        },
+        "fff": {
+            "private-dm-fff2shaurya": {
+                "read": 6
             },
             "rooms": []
         }
@@ -572,9 +705,7 @@
             },
             "invincible": false,
             "password": "71b3a509b5a6a6a0760fcc403983e5313ec47c99b5c315dfd23ecf70",
-            "servers": [
-                "678"
-            ],
+            "servers": [],
             "usr": "BBC"
         },
         "BIaek": {
@@ -623,9 +754,7 @@
             },
             "invincible": false,
             "password": "a8baad7fcc796bf0b5bf6b8d7e8f89648da755a2bc0633a6bfb407fa",
-            "servers": [
-                "678"
-            ],
+            "servers": [],
             "usr": "Blaek"
         },
         "Cheddarchad1": {
@@ -2580,7 +2709,7 @@
             "servers": [],
             "usr": "sharya"
         },
-        "shaurya": {
+        "shaurya#": {
             "admin": false,
             "banned": false,
             "friendData": {
@@ -2977,6 +3106,42 @@
             "admin": false,
             "friendData": {
                 "friends": [],
+                "outgoing": [],
+                "pending": [],
+                "blocked": [],
+                "blockedby": []
+            },
+            "invincible": false,
+            "servers": [],
+            "banned": false
+        },
+        "shaurya": {
+            "usr": "shaurya",
+            "password": "4ae77da323f9cfa7a68bd6d37e51ee90d1acbdcd4813181cc67cdc6f2cb12b59",
+            "salt": "3448732721",
+            "admin": false,
+            "friendData": {
+                "friends": [
+                    "fff"
+                ],
+                "outgoing": [],
+                "pending": [],
+                "blocked": [],
+                "blockedby": []
+            },
+            "invincible": false,
+            "servers": [],
+            "banned": false
+        },
+        "fff": {
+            "usr": "fff",
+            "password": "a96d04b21413bbe496d7958efd0e3aac7eb39c7e84586605faa6d691bbbaeb91",
+            "salt": "7034245488",
+            "admin": false,
+            "friendData": {
+                "friends": [
+                    "shaurya"
+                ],
                 "outgoing": [],
                 "pending": [],
                 "blocked": [],
