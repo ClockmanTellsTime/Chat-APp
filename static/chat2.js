@@ -95,7 +95,7 @@ function joinChat(name) {
         if (status.status === 403) {
             console.error('Subscription failed. Access forbidden.');
         }
-        console.log(status.error)
+        console.log(status)
     });
 
     chat_.bind("message",function(data) {

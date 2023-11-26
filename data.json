@@ -1,7 +1,7 @@
 {
     "chatData": {
         "global": {
-            "ids": 16,
+            "ids": 18,
             "messages": {
                 "9": {
                     "message": "fdas",
@@ -66,6 +66,22 @@
                     "user": "shaurya",
                     "type": "global",
                     "id": "16"
+                },
+                "17": {
+                    "message": "hi<br>d   <br>d   ",
+                    "room": "global",
+                    "time": "2023-11-25 22:57:51.860100",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "17"
+                },
+                "18": {
+                    "message": "ddddddddd",
+                    "room": "global",
+                    "time": "2023-11-25 22:57:58.083885",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "18"
                 }
             },
             "type": "global"
@@ -294,6 +310,24 @@
             "members": [
                 "fff",
                 "shaurya"
+            ]
+        },
+        "presence-hi": {
+            "messages": {},
+            "ids": 0,
+            "type": "dm",
+            "members": [
+                null,
+                null
+            ]
+        },
+        "private-hi": {
+            "messages": {},
+            "ids": 0,
+            "type": "dm",
+            "members": [
+                null,
+                null
             ]
         }
     },

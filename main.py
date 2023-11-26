@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import pusher
 from datetime import datetime
 import hashlib
+import hmac
 import string
 
 deleted = False
@@ -88,6 +89,20 @@ def most_alphabetical_order(word1, word2):
 def least_alphabetical_order(word1, word2):
     sorted_words = sorted([word1, word2])
     return sorted_words[1]  
+
+
+def generate_hmac_sha256(message):
+    # Convert the key and message to bytes if they're not already in bytes
+    key_bytes = bytes("b4805fbd535ae0d56573", 'utf-8') if isinstance("b4805fbd535ae0d56573", str) else "b4805fbd535ae0d56573"
+    message_bytes = bytes(message, 'utf-8') if isinstance(message, str) else message
+
+    # Generate the HMAC using SHA256
+    hmac_sha256 = hmac.new(key_bytes, message_bytes, hashlib.sha256)
+
+    # Get the hexadecimal representation of the digest
+    hmac_hexdigest = hmac_sha256.hexdigest()
+    
+    return hmac_hexdigest
 
 
 
@@ -343,7 +358,7 @@ def signup():
 
       session["user"] = usr
 
-      session["id"] = usr + str(random.randint(1, 1000000000000000))
+      session["id"] = usr +"-"+str(random.randint(1, 1000000000000000))
       writeDB(db)
       return redirect(url_for("join"))
 
@@ -378,7 +393,7 @@ def signin():
 
       if db["users"][usr]["password"] == password:
         session["user"] = usr
-        session["id"] = usr + str(random.randint(1, 1000000000000000))
+        session["id"] = usr + "-" +str(random.randint(1, 1000000000000000))
         return redirect(url_for("join"))
 
       else:
@@ -765,16 +780,43 @@ def connect():
 def authenticate_channel(name,id):
     return True
 
+
+@app.route('/pusher/user-auth', methods=['POST'])
+def pusher_auth_user():
+    socket_id = request.form['socket_id']
+
+    user_data = '{"id": "'+session.get("id")+'","user_info": {"name":"'+ session.get("user")+'"}}'
+
+    mmm = str(socket_id) + "::user::"+str(user_data)
+
+    response = {
+        'auth': "3ee636d6edcdecffe90e:"+generate_hmac_sha256(mmm),
+        "user_data": user_data,
+        "user_info": {
+            "name": str(session.get("user"))
+        }
+    }
+
+    return jsonify(response)
+
 @app.route('/pusher/auth', methods=['POST'])
 def pusher_auth():
     channel_name = request.form['channel_name']
     socket_id = request.form['socket_id']
 
+    if channel_name.startswith("presence-"):
+        response = pusher_client.authenticate(
+            channel=channel_name,
+            socket_id=socket_id
+        )
+        return jsonify(response)
+    
     if authenticate_channel(channel_name, socket_id):
         response = pusher_client.authenticate(
             channel=channel_name,
             socket_id=socket_id
         )
+        print(response)
         return jsonify(response)
     else:
         return jsonify(response), 403  # Access forbidden
