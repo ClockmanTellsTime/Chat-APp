@@ -46,7 +46,7 @@ db = openDB()
 
 #Clear rooms in the thing
 for user in db["userdata"]:
-  db["userdata"][user]["rooms"] = []
+  db["userdata"][user]["online"] = False
 
 
 
@@ -905,8 +905,9 @@ def get_messages():
     session["room"] = room
 
     if not room in db["chatData"]:
-
         if "server" in str(room):
+            id = str(room).split("server-")[1]
+
             if str(id) in db["servers"]:
                 db["chatData"][room] = {
                     "messages": {},
@@ -1092,7 +1093,7 @@ def message():
 
 
     if "server" in str(room):
-        db["chatData"][room]["messages"][id]["servername"] = db["servers"][room[15:len(room)]]["name"]
+        db["chatData"][room]["messages"][id]["servername"] = db["servers"][room[16:len(room)]]["name"]
 
     if "-dm" in str(room):
         username1, username2 = get_usernames(room)

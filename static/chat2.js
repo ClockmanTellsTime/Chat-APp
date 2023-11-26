@@ -514,7 +514,10 @@ function chooseChat(friendFormatted) {
         document.querySelector(`#${friendFormatted}`).removeChild(document.querySelector(`#${friendFormatted} > div.notifications`))
     }
 
-    document.querySelector(`.presence-dm-fff2shaurya > .onlineDisplay`).style.display ="none"
+    try {
+        document.querySelector(`.${friendFormatted} > .onlineDisplay`).style.display ="none"
+    }
+    catch(e){}
 }
 
 function addNotification(dm, amount) {

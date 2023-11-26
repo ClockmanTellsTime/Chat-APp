@@ -1,7 +1,7 @@
 {
     "chatData": {
         "global": {
-            "ids": 26,
+            "ids": 38,
             "messages": {
                 "9": {
                     "message": "fdas",
@@ -146,6 +146,102 @@
                     "user": "shaurya",
                     "type": "global",
                     "id": "26"
+                },
+                "27": {
+                    "message": "fda",
+                    "room": "global",
+                    "time": "2023-11-26 22:51:40.719796",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "27"
+                },
+                "28": {
+                    "message": "fda",
+                    "room": "global",
+                    "time": "2023-11-26 22:51:41.432336",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "28"
+                },
+                "29": {
+                    "message": "fads",
+                    "room": "global",
+                    "time": "2023-11-26 22:51:42.184665",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "29"
+                },
+                "30": {
+                    "message": "fdas",
+                    "room": "global",
+                    "time": "2023-11-26 22:51:42.920381",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "30"
+                },
+                "31": {
+                    "message": "fads",
+                    "room": "global",
+                    "time": "2023-11-26 22:51:43.521172",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "31"
+                },
+                "32": {
+                    "message": "fads",
+                    "room": "global",
+                    "time": "2023-11-26 22:51:44.208685",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "32"
+                },
+                "33": {
+                    "message": "fasd",
+                    "room": "global",
+                    "time": "2023-11-26 22:51:44.865063",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "33"
+                },
+                "34": {
+                    "message": "fsa",
+                    "room": "global",
+                    "time": "2023-11-26 22:51:45.575555",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "34"
+                },
+                "35": {
+                    "message": "fasfasd",
+                    "room": "global",
+                    "time": "2023-11-26 22:51:46.896628",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "35"
+                },
+                "36": {
+                    "message": "fads",
+                    "room": "global",
+                    "time": "2023-11-26 22:51:49.656795",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "36"
+                },
+                "37": {
+                    "message": "hi",
+                    "room": "global",
+                    "time": "2023-11-26 22:52:16.809638",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "37"
+                },
+                "38": {
+                    "message": "s",
+                    "room": "global",
+                    "time": "2023-11-26 22:52:26.306092",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "38"
                 }
             },
             "type": "global"
@@ -814,6 +910,50 @@
                 "-fff",
                 "shaurya"
             ]
+        },
+        "presence-server-679": {
+            "messages": {
+                "1": {
+                    "message": "d",
+                    "room": "presence-server-679",
+                    "time": "2023-11-26 22:59:17.660426",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "1"
+                },
+                "2": {
+                    "message": "d",
+                    "room": "presence-server-679",
+                    "time": "2023-11-26 23:00:55.824535",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "2",
+                    "servername": "1"
+                },
+                "3": {
+                    "message": "d",
+                    "room": "presence-server-679",
+                    "time": "2023-11-26 23:00:56.664323",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "3",
+                    "servername": "1"
+                },
+                "4": {
+                    "message": "d",
+                    "room": "presence-server-679",
+                    "time": "2023-11-26 23:00:57.231928",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "4",
+                    "servername": "1"
+                }
+            },
+            "ids": 4,
+            "type": "groupchat",
+            "members": [
+                "shaurya"
+            ]
         }
     },
     "servers": {
@@ -824,101 +964,131 @@
             "name": "yug76g67tg76r5d",
             "owner": "shaurya"
         },
-        "servers": 678
+        "servers": 679,
+        "679": {
+            "members": [
+                "shaurya"
+            ],
+            "name": "1",
+            "owner": "shaurya"
+        }
     },
     "userdata": {
         "AP40462": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "BBC": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "BIaek": {
             "rooms": [],
             "shauryaTOBIaek": {
                 "read": 6
-            }
+            },
+            "online": false
         },
         "Big_D": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "Blaek": {
             "rooms": [],
             "shauryaTOBlaek": {
                 "read": 52
-            }
+            },
+            "online": false
         },
         "Cheddarchad1": {
             "rooms": [],
             "shauryaTOCheddarchad1": {
                 "read": 9
-            }
+            },
+            "online": false
         },
         "Fag": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "GIGANIGGA": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "Gabe": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "Nolan": {
             "rooms": [],
             "shauryaTONolan": {
                 "read": 0
-            }
+            },
+            "online": false
         },
         "Sam": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "Shasta": {
             "rooms": [],
             "shauryaTOShasta": {
                 "read": 0
-            }
+            },
+            "online": false
         },
         "Shauruay": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "Sue_Shaurya": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "VeryCoolMan": {
             "rooms": [],
             "shauryaTOVeryCoolMan": {
                 "read": 5
-            }
+            },
+            "online": false
         },
         "bob": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "booobo": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "dsfdsf": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "fadsfdasfda": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "fag": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "gabe": {
             "gabeTOshaurya": {
                 "read": 74
             },
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "ilikepizza": {
             "ilikepizzaTOshaurya": {
                 "read": 8
             },
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "ilikepizzatoo": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "lilnasxbiggestfan": {
             "lilnasxbiggestfanTOShasta": {
@@ -930,13 +1100,16 @@
             "rooms": [],
             "shauryaTOlilnasxbiggestfan": {
                 "read": 55
-            }
+            },
+            "online": false
         },
         "sdfvbfjgdfgsdfg": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "sharya": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "shaurya": {
             "gabeTOshaurya": {
@@ -973,34 +1146,42 @@
             "presence-dm-fff2shaurya": {
                 "read": 36
             },
-            "online": true
+            "online": false
         },
         "shauryafadsfasd": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "shauya": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "shuarya": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "stfu": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "superzemoney1023": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "wefnewjfn": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "wetroiwejtiowejtio": {
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "what": {
             "lilnasxbiggestfanTOwhat": {
                 "read": 5
             },
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "fff": {
             "private-dm-fff2shaurya": {
@@ -1010,24 +1191,25 @@
             "presence-dm-fff2shaurya": {
                 "read": 36
             },
-            "online": true
+            "online": false
         },
         "-fff": {
             "presence-dm-fff2shaurya": {
                 "read": 0
             },
-            "rooms": []
+            "rooms": [],
+            "online": false
         },
         "fff-916086043053160": {
-            "online": true,
+            "online": false,
             "rooms": []
         },
         "fdasfdasfads-621628033660705": {
-            "online": true,
+            "online": false,
             "rooms": []
         },
         "shaurya-657039823637160": {
-            "online": true,
+            "online": false,
             "rooms": []
         }
     },
@@ -3771,7 +3953,9 @@
                 "blockedby": []
             },
             "invincible": false,
-            "servers": [],
+            "servers": [
+                "679"
+            ],
             "banned": false
         },
         "fff": {
