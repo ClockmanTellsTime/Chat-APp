@@ -106,6 +106,66 @@ def generate_hmac_sha256(message):
 
 
 
+
+
+@app.route("/webhook", methods=['POST'])
+def pusher_webhook():
+  # pusher_client is obtained through pusher_client = pusher.Pusher( ... )
+  webhook = pusher_client.validate_webhook(
+    key=request.headers.get('X-Pusher-Key'),
+    signature=request.headers.get('X-Pusher-Signature'),
+    body=request.data
+  )
+
+  for event in webhook['events']:
+    if event['name'] == "channel_occupied":
+      if "user-" in event["channel"]:
+          user = str(event["channel"]).split("user-")[1].split("-")[0]
+          print(str(user) + " has become online!")
+
+
+          if not user in db["userdata"]:
+              db["userdata"][user] = {}
+
+          db["userdata"][user]["online"] = True
+
+          if not user in db["users"]:
+              return "ok"
+
+          for friend in db["users"][user]['friendData']["friends"]:       
+            data = {
+                "user": user,
+                "online": db["userdata"][user]["online"]
+            }
+
+            pusher_client.trigger("private-user-"+friend,"whosonline",data)
+
+    elif event['name'] == "channel_vacated":
+        if "user-" in event["channel"]:
+          user = str(event["channel"]).split("user-")[1].split("-")[0]
+          print(str(user) + " has gone offline!")
+
+
+          if not user in db["userdata"]:
+              db["userdata"][user] = {}
+
+          db["userdata"][user]["online"] = False
+
+          if not user in db["users"]:
+              return "ok"
+
+          for friend in db["users"][user]['friendData']["friends"]:     
+              data = {
+                  "user": user,
+                  "online": db["userdata"][user]["online"]
+              }
+
+              pusher_client.trigger("private-user-"+friend,"whosonline",data)
+
+  return "ok"
+
+
+
 @app.route("/", methods=["POST", "GET"])
 def join():
   #return render_template("index.html")
@@ -527,9 +587,9 @@ def configure(id):
             }
 
 
-        pusher_client.trigger(member,"servers",serverData)
+        pusher_client.trigger("private-user-"+member,"servers",serverData)
 
-        pusher_client.trigger(member,"servermembers",data)
+        pusher_client.trigger("private-user-"+member,"servermembers",data)
 
 
   writeDB(db)
@@ -567,7 +627,7 @@ def leave(id):
         "id": id,
     }
 
-    pusher_client.trigger(member,"servermembers",data)
+    pusher_client.trigger("private-user-"+member,"servermembers",data)
 
   writeDB(db)
   return redirect(url_for("join"))
@@ -603,8 +663,8 @@ def friendrequest():
     db["users"][user]["friendData"]["outgoing"].append(friend)
     db["users"][friend]["friendData"]["pending"].append(user)
 
-  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
-  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
   writeDB(db)
   return "ok"
 
@@ -647,8 +707,8 @@ def blockuser():
     if user in db["users"][friend]["friendData"]["friends"]:
       db["users"][friend]["friendData"]["friends"].remove(user)
 
-  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
-  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
   writeDB(db)
   return "ok"
 
@@ -668,8 +728,8 @@ def removefriend():
     db["users"][friend]["friendData"]["friends"].remove(user)
 
 
-  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
-  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
   writeDB(db)
   return "ok"
 
@@ -690,8 +750,8 @@ def unblockuser():
     db["users"][friend]["friendData"]["blockedby"].remove(user)
 
   
-  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
-  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
   writeDB(db)
   return "ok"
 
@@ -710,8 +770,8 @@ def cancelfriendrequest():
     db["users"][user]["friendData"]["outgoing"].remove(friend)
     db["users"][friend]["friendData"]["pending"].remove(user)
 
-  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
-  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
   writeDB(db)
   return "ok"
 
@@ -734,8 +794,8 @@ def acceptfriendrequest():
     db["users"][user]["friendData"]["pending"].remove(friend)
     db["users"][friend]["friendData"]["outgoing"].remove(user)
 
-  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
-  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
   writeDB(db)
   return "ok"
 
@@ -756,8 +816,8 @@ def declinefriendrequest():
     db["users"][user]["friendData"]["pending"].remove(friend)
     db["users"][friend]["friendData"]["outgoing"].remove(user)
 
-  pusher_client.trigger(friend,"friends",db["users"][friend]["friendData"])
-  pusher_client.trigger(user,"friends",db["users"][user]["friendData"])
+  pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
+  pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
   writeDB(db)
   return "ok"
 
@@ -816,7 +876,6 @@ def pusher_auth():
             channel=channel_name,
             socket_id=socket_id
         )
-        print(response)
         return jsonify(response)
     else:
         return jsonify(response), 403  # Access forbidden
@@ -828,7 +887,7 @@ def get_usernames(string):
     
     # Check if there are at least two parts separated by '2'
     if len(parts) >= 2:
-        username1 = parts[0][len('private-dm-'):]  # Extract the first username
+        username1 = parts[0][len('presence-dm-'):]  # Extract the first username
         username2 = parts[1]  # Extract the second username
         return username1, username2
     else:
@@ -842,7 +901,6 @@ def get_messages():
     socket_id = data.get("socket_id","")
 
     user = session.get("user")
-
 
     session["room"] = room
 
@@ -877,7 +935,7 @@ def get_messages():
           "read": db["chatData"][room]["ids"]
       }
 
-    pusher_client.trigger(socket_id,"messages",db["chatData"][room]["messages"])
+    pusher_client.trigger("private-socket_id-"+socket_id,"messages",db["chatData"][room]["messages"])
     writeDB(db)
     return "ok"
 
@@ -887,12 +945,12 @@ def get_friends():
     socket_id = data.get("socket_id","")
     user = session.get("user")
 
-    pusher_client.trigger(socket_id,"friends",db["users"][user]["friendData"])
+    pusher_client.trigger("private-socket_id-"+socket_id,"friends",db["users"][user]["friendData"])
 
 
     #show all dms!
     for friend in db["users"][user]["friendData"]["friends"]:
-        room = "private-dm-" + most_alphabetical_order(user,friend) + "2"+least_alphabetical_order(user,friend)
+        room = "presence-dm-" + most_alphabetical_order(user,friend) + "2"+least_alphabetical_order(user,friend)
         
         if room in db["chatData"]:
             if not user in db["userdata"]:
@@ -906,8 +964,25 @@ def get_friends():
                 "amount": db["chatData"][room]["ids"] - db["userdata"][user][room]["read"]
             }
 
-            pusher_client.trigger(user,"dm",data)
+            pusher_client.trigger("private-socket_id-"+socket_id,"dm",data)
 
+
+    #show all online people
+    for friend in db["users"][user]["friendData"]["friends"]:
+        if friend in db["userdata"]:
+            data = {
+                "user": friend,
+                "online": db["userdata"][friend]["online"]
+            }
+
+            pusher_client.trigger("private-socket_id-"+socket_id,"whosonline",data)
+
+        else:
+            data = {
+                "user": friend,
+                "online": False
+            }
+            pusher_client.trigger("private-socket_id-"+socket_id,"whosonline",data)
 
     writeDB(db)
     return "ok"
@@ -937,7 +1012,7 @@ def get_server_members():
             "id": server,
         }
 
-        pusher_client.trigger(socket_id,"servermembers",data)
+        pusher_client.trigger("private-socket_id-"+socket_id,"servermembers",data)
     writeDB(db)
     return "ok"
 
@@ -962,7 +1037,7 @@ def get_servers():
         }
 
 
-    pusher_client.trigger(socket_id,"servers",serverData)
+    pusher_client.trigger("private-socket_id-"+socket_id,"servers",serverData)
     writeDB(db)
     return "ok"
 
@@ -1022,6 +1097,7 @@ def message():
     if "-dm" in str(room):
         username1, username2 = get_usernames(room)
 
+
         db["chatData"][room]["messages"][id][username1+"_read_at"] = ""
         db["chatData"][room]["messages"][id][username2+"_read_at"] = ""
 
@@ -1055,7 +1131,7 @@ def message():
             "amount": db["chatData"][room]["ids"] - db["userdata"][other_user][room]["read"]
         }
 
-        pusher_client.trigger(other_user,"dm",data)
+        pusher_client.trigger("private-user-"+other_user,"dm",data)
 
 
     data = db["chatData"][room]["messages"][id]
@@ -1095,7 +1171,7 @@ def read_message():
           "room": room,
           "id": id,
       }
-      pusher_client.trigger(other_user,"messageread",data)
+      pusher_client.trigger("private-user-"+other_user,"messageread",data)
     writeDB(db)
     return "ok"
 

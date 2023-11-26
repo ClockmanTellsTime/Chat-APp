@@ -14,8 +14,10 @@ pusher.connection.bind('connected', function() {
         socketId: socket_id
     })
 
-    var only_you_channel = pusher.subscribe(socket_id)
-    var all_your_accounts = pusher.subscribe(user)
+    pusher.signin()
+
+    var all_your_accounts = pusher.subscribe(`private-user-${user}`)
+    var only_you_channel = pusher.subscribe(`private-socket_id-${socket_id}`)
 
     only_you_channel.bind("messages",function(data) {
         document.querySelector(".messages").innerHTML = ""
@@ -53,7 +55,8 @@ pusher.connection.bind('connected', function() {
     only_you_channel.bind("dm",function(data) {
         if (data["user"] == formatFriendName(chat)) {return false}
         if (data["amount"] == 0) {return false}
-    
+        
+        console.log('s')
         addNotification(data["user"], data["amount"])
     })
 
@@ -62,6 +65,32 @@ pusher.connection.bind('connected', function() {
         if (data["amount"] == 0) {return false}
         addNotification(data["user"], data["amount"])
     })
+
+    only_you_channel.bind("whosonline",function(data) {
+        var thing = document.querySelector(`.${data.user}OnlineDisplay`)
+        console.log(`.${data.user}OnlineDisplay`)
+
+        if (data.online) {
+            thing.style.backgroundColor = "green"
+        }
+        else {
+            thing.style.backgroundColor = "red"
+        }
+    })
+
+    all_your_accounts.bind("whosonline",function(data) {
+        var thing = document.querySelector(`.${data.user}OnlineDisplay`)
+        console.log(`.${data.user}OnlineDisplay`)
+
+        if (data.online) {
+            thing.style.backgroundColor = "green"
+        }
+        else {
+            thing.style.backgroundColor = "red"
+        }
+    })
+
+
 
     all_your_accounts.bind("messageread",function(data) {
         if (chat == data.room) {
@@ -145,8 +174,8 @@ function loadFriends(data) {
 
     for (var friend of data["friends"]) {
         var friendFormatted = formatFriendName(friend)
-        var chatFormatted = "private-dm-"+mostAlphabeticalOrder(friendFormatted,user) + "2" + leastAlphabeticalOrder(friendFormatted,user)
-        document.querySelector(".friendchats").innerHTML += `<button id="${chatFormatted}" class="friendCHAT ${chatFormatted}" onclick="selectChat('${chatFormatted}','${chatFormatted}')">   <div class='nameDisplay ${chatFormatted}ChatButton'>${String(friend).replaceAll("+"," ")}</div></button>`
+        var chatFormatted = "presence-dm-"+mostAlphabeticalOrder(friendFormatted,user) + "2" + leastAlphabeticalOrder(friendFormatted,user)
+        document.querySelector(".friendchats").innerHTML += `<button id="${chatFormatted}" class="friendCHAT ${chatFormatted}" onclick="selectChat('${chatFormatted}','${chatFormatted}')">  <div class='nameDisplay ${chatFormatted}ChatButton'>${String(friend).replaceAll("+"," ")}</div> <div class="onlineDisplay ${friendFormatted}OnlineDisplay"></div></button>`
     } 
 
     for (blockedUser of data["blocked"]) {
@@ -179,7 +208,7 @@ function loadServers(data) {
 
     for (var i in data) {
 
-        var name = "private-server-"+data[i].id
+        var name = "presence-server-"+data[i].id
 
         document.querySelector(".serverMenu").innerHTML += `<button class="serverChat" id="${name}" onclick="selectChat('${name}')">${data[i].name}</button><br><br>`
     
@@ -484,6 +513,8 @@ function chooseChat(friendFormatted) {
 
         document.querySelector(`#${friendFormatted}`).removeChild(document.querySelector(`#${friendFormatted} > div.notifications`))
     }
+
+    document.querySelector(`.presence-dm-fff2shaurya > .onlineDisplay`).style.display ="none"
 }
 
 function addNotification(dm, amount) {
