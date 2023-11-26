@@ -168,10 +168,11 @@
             socketId: socket_id
         })
 
-        var only_you_channel = pusher.subscribe(socket_id)
-        var all_your_accounts = pusher.subscribe(user)
+        var only_you_channel = pusher.subscribe("private-socket_id-"+socket_id)
+        var all_your_accounts = pusher.subscribe("private-user-"+user)
 
         only_you_channel.bind("friends",function(data) {
+            console.log("d")
             loadFriends(data)
         })
 

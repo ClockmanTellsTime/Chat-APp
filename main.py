@@ -545,10 +545,16 @@ def configure(id):
         if name == "confirm":
           for member in db["servers"][id]["members"]:
             db["users"][member]["servers"].remove(id)
-
-          del db["chatData"]["server_" + str(id)]
-
-          del db["servers"][id]
+          
+          try:
+            del db["chatData"]["server_" + str(id)]
+          except:
+              pass
+          
+          try:
+            del db["servers"][id]
+          except:
+              pass
 
       for member in memberstoupdate:
         serverData = {}
@@ -589,7 +595,7 @@ def configure(id):
 
         pusher_client.trigger("private-user-"+member,"servers",serverData)
 
-        pusher_client.trigger("private-user-"+member,"servermembers",data)
+        pusher_client.trigger("private-user-"+member,"servermembers",serverData)
 
 
   writeDB(db)
@@ -946,8 +952,8 @@ def get_friends():
     socket_id = data.get("socket_id","")
     user = session.get("user")
 
+    print("d")
     pusher_client.trigger("private-socket_id-"+socket_id,"friends",db["users"][user]["friendData"])
-
 
     #show all dms!
     for friend in db["users"][user]["friendData"]["friends"]:
