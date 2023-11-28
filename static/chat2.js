@@ -134,6 +134,18 @@ function joinChat(name) {
         loadMessage(data)
     })
 
+    chat_.bind("client-typing",function(data) {
+
+        var box = document.querySelector(".typingDisplay")
+
+        if (data.typing == true) {
+            box.style.display = "flex"
+        }
+        else {
+            box.style.display = "none"
+        }
+    })
+
     if (name == "global") {
         try {
             document.querySelector("body > div.chatMenu > div.friendchats > div").style.display = "none"
@@ -583,12 +595,14 @@ setInterval(function(){
 
     if (typing && typingSent == false) {
         typingSent = true
-        console.log("typing sent")
+
+        pusher.channel(chat).trigger("client-typing",{"user":user,"typing":true})
     }
 
     if (typing == false && stoppedSent == false) {
         stoppedSent = true
-        console.log("stopped sent")
+
+        pusher.channel(chat).trigger("client-typing",{"user":user,"typing":false})
     }
 
 },500)

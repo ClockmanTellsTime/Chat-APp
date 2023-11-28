@@ -1,7 +1,7 @@
 {
     "chatData": {
         "global": {
-            "ids": 1,
+            "ids": 3,
             "messages": {
                 "1": {
                     "message": "d",
@@ -10,6 +10,22 @@
                     "user": "shaurya",
                     "type": "global",
                     "id": "1"
+                },
+                "2": {
+                    "message": "fdsafasd",
+                    "room": "global",
+                    "time": "2023-11-28 02:43:47.195949",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "2"
+                },
+                "3": {
+                    "message": "fudisafadsiuhfuhdiafhuiads",
+                    "room": "global",
+                    "time": "2023-11-28 02:44:12.413547",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "3"
                 }
             },
             "type": "global"
@@ -37,6 +53,26 @@
             "members": [
                 "shaurya"
             ]
+        },
+        "presence-dm-fff2shaurya": {
+            "messages": {
+                "1": {
+                    "message": "I have some money for you!",
+                    "room": "presence-dm-fff2shaurya",
+                    "time": "2023-11-28 02:49:37.150650",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "1",
+                    "fff_read_at": "2023-11-28 02:49:38.232376",
+                    "shaurya_read_at": "2023-11-28 02:49:37.151649"
+                }
+            },
+            "ids": 1,
+            "type": "dm",
+            "members": [
+                "fff",
+                "shaurya"
+            ]
         }
     },
     "servers": {
@@ -49,7 +85,18 @@
             "owner": "shaurya"
         }
     },
-    "userdata": {},
+    "userdata": {
+        "fff": {
+            "presence-dm-fff2shaurya": {
+                "read": 1
+            }
+        },
+        "shaurya": {
+            "presence-dm-fff2shaurya": {
+                "read": 1
+            }
+        }
+    },
     "users": {
         "shaurya": {
             "usr": "shaurya",
@@ -57,7 +104,27 @@
             "salt": "7344866148",
             "admin": false,
             "friendData": {
-                "friends": [],
+                "friends": [
+                    "fff"
+                ],
+                "outgoing": [],
+                "pending": [],
+                "blocked": [],
+                "blockedby": []
+            },
+            "invincible": false,
+            "servers": [],
+            "banned": false
+        },
+        "fff": {
+            "usr": "fff",
+            "password": "4d2385c207d5273a224a24bc58fc40a36f8ec15798cf72801b3f965f28253868",
+            "salt": "8018346900",
+            "admin": false,
+            "friendData": {
+                "friends": [
+                    "shaurya"
+                ],
                 "outgoing": [],
                 "pending": [],
                 "blocked": [],
