@@ -180,8 +180,9 @@
             loadFriends(data)
         })
 
-
-        sendDataToServer("get-friends",{"socket_id":socket_id})
+        setTimeout(function(){
+            sendDataToServer("get-friends",{"socket_id":socket_id})
+        },1000)
     });
     
     function sendDataToServer(endpoint,data) {

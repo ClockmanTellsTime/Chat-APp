@@ -160,7 +160,10 @@
     })
 
     
-    sendDataToServer("servermembers",{"socket_id":socket_id,"server_id":id})
+        
+    setTimeout(function(){
+        sendDataToServer("servermembers",{"socket_id":socket_id,"server_id":id})
+    },1000)
 });
 
 

@@ -109,10 +109,11 @@ pusher.connection.bind('connected', function() {
 
 
     
-
-    joinChat("global")
-    sendDataToServer("get-friends",{"socket_id":socket_id})
-    sendDataToServer("get-servers",{"socket_id":socket_id})
+    setTimeout(function(){
+        joinChat("global")
+        sendDataToServer("get-friends",{"socket_id":socket_id})
+        sendDataToServer("get-servers",{"socket_id":socket_id})
+    },1000)
 });
 
 
