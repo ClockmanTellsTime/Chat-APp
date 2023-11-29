@@ -42,7 +42,8 @@ app.config["SECRET_KEY"] = "432178i784321789hcer7fncsansdjfd8h3e9823he"
 
 
 db = openDB()
-
+db["chatData"]["global"]["messages"] = {}
+writeDB(db)
 
 #Clear rooms in the thing
 for user in db["userdata"]:
