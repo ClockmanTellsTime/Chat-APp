@@ -52,6 +52,13 @@ pusher.connection.bind('connected', function() {
         loadServerMembers(data)
     })
 
+    only_you_channel.bind("message",function(data) {
+        if (document.querySelector(".messages").innerHTML == "No Messages!" || document.querySelector(".messages").innerHTML == "Loading messages...") {
+            document.querySelector(".messages").innerHTML = ""
+        }
+        loadMessage(data)
+    })
+
     only_you_channel.bind("dm",function(data) {
         if (data["user"] == formatFriendName(chat)) {return false}
         if (data["amount"] == 0) {return false}

@@ -843,7 +843,13 @@ def connect():
     return "ok"
 
 
-def authenticate_channel(name,id):
+def authenticate_channel(user,name,id):
+    if "dm-" in name or "server-" in name:
+        if user in db["chatData"][name]["members"]:
+            return True
+        else:
+            return False
+        
     return True
 
 
@@ -869,22 +875,17 @@ def pusher_auth_user():
 def pusher_auth():
     channel_name = request.form['channel_name']
     socket_id = request.form['socket_id']
-
-    if channel_name.startswith("presence-"):
-        response = pusher_client.authenticate(
-            channel=channel_name,
-            socket_id=socket_id
-        )
-        return jsonify(response)
+    user = session.get("user")
     
-    if authenticate_channel(channel_name, socket_id):
+    if authenticate_channel(user,channel_name, socket_id):
         response = pusher_client.authenticate(
             channel=channel_name,
             socket_id=socket_id
         )
         return jsonify(response)
     else:
-        return jsonify(response), 403  # Access forbidden
+        response = "not allowed!"
+        return response, 403  # Access forbidden
 
 
 def get_usernames(string):
@@ -930,6 +931,11 @@ def get_messages():
             }
 
 
+
+    if "dm-" in room or "server-" in room:
+        if not user in db["chatData"][room]["members"]:
+            return True
+
     if "-dm" in str(room):
       #update messages read in that thing
       if not user in db["userdata"]:
@@ -942,7 +948,14 @@ def get_messages():
           "read": db["chatData"][room]["ids"]
       }
 
-    pusher_client.trigger("private-socket_id-"+socket_id,"messages",db["chatData"][room]["messages"])
+
+    try:
+      pusher_client.trigger("private-socket_id-"+socket_id,"messages",db["chatData"][room]["messages"])
+    except:
+        for message in db["chatData"][room]["messages"]:
+          data = db["chatData"][room]["messages"][message]
+          pusher_client.trigger("private-socket_id-"+socket_id,"message",data)
+
     writeDB(db)
     return "ok"
 

@@ -1,7 +1,7 @@
 {
     "chatData": {
         "global": {
-            "ids": 3,
+            "ids": 126,
             "messages": {
                 "1": {
                     "message": "d",
@@ -26,6 +26,142 @@
                     "user": "shaurya",
                     "type": "global",
                     "id": "3"
+                },
+                "4": {
+                    "message": "fdsafds",
+                    "room": "global",
+                    "time": "2023-11-29 03:55:01.259235",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "4"
+                },
+                "5": {
+                    "message": "fdasfds",
+                    "room": "global",
+                    "time": "2023-11-29 03:55:03.154402",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "5"
+                },
+                "6": {
+                    "message": "f",
+                    "room": "global",
+                    "time": "2023-11-29 03:55:08.170572",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "6"
+                },
+                "7": {
+                    "message": "fdsdsfas",
+                    "room": "global",
+                    "time": "2023-11-29 03:55:39.268016",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "7"
+                },
+                "8": {
+                    "message": "fdsfasdfds",
+                    "room": "global",
+                    "time": "2023-11-29 03:55:41.412210",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "8"
+                },
+                "9": {
+                    "message": "dsfa",
+                    "room": "global",
+                    "time": "2023-11-29 03:55:42.669505",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "9"
+                },
+                "10": {
+                    "message": "g",
+                    "room": "global",
+                    "time": "2023-11-29 03:55:53.811700",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "10"
+                },
+                "11": {
+                    "message": "fdsa",
+                    "room": "global",
+                    "time": "2023-11-29 03:55:55.084149",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "11"
+                },
+                "12": {
+                    "message": "fdas",
+                    "room": "global",
+                    "time": "2023-11-29 03:55:55.924447",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "12"
+                },
+                "13": {
+                    "message": "fdas",
+                    "room": "global",
+                    "time": "2023-11-29 03:55:59.973176",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "13"
+                },
+                "14": {
+                    "message": "fdsa",
+                    "room": "global",
+                    "time": "2023-11-29 03:56:00.661039",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "14"
+                },
+                "15": {
+                    "message": "s",
+                    "room": "global",
+                    "time": "2023-11-29 03:56:01.307668",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "15"
+                },
+                "16": {
+                    "message": "w",
+                    "room": "global",
+                    "time": "2023-11-29 03:56:04.340350",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "16"
+                },
+                "17": {
+                    "message": "w",
+                    "room": "global",
+                    "time": "2023-11-29 03:56:05.709024",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "17"
+                },
+                "18": {
+                    "message": "a",
+                    "room": "global",
+                    "time": "2023-11-29 03:56:06.620613",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "18"
+                },
+                "19": {
+                    "message": "g",
+                    "room": "global",
+                    "time": "2023-11-29 03:56:09.252881",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "19"
+                },
+                "20": {
+                    "message": "fasd",
+                    "room": "global",
+                    "time": "2023-11-29 03:56:45.373835",
+                    "user": "shaurya",
+                    "type": "global",
+                    "id": "20"
                 }
             },
             "type": "global"
@@ -65,18 +201,150 @@
                     "id": "1",
                     "fff_read_at": "2023-11-28 02:49:38.232376",
                     "shaurya_read_at": "2023-11-28 02:49:37.151649"
+                },
+                "2": {
+                    "message": "fdsa",
+                    "room": "presence-dm-fff2shaurya",
+                    "time": "2023-11-29 03:55:46.123745",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "2",
+                    "fff_read_at": "",
+                    "shaurya_read_at": "2023-11-29 03:55:46.123745"
+                },
+                "3": {
+                    "message": "fds",
+                    "room": "presence-dm-fff2shaurya",
+                    "time": "2023-11-29 03:55:46.939515",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "3",
+                    "fff_read_at": "",
+                    "shaurya_read_at": "2023-11-29 03:55:46.939515"
+                },
+                "4": {
+                    "message": "fads",
+                    "room": "presence-dm-fff2shaurya",
+                    "time": "2023-11-29 03:55:47.820398",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "4",
+                    "fff_read_at": "",
+                    "shaurya_read_at": "2023-11-29 03:55:47.820398"
+                },
+                "5": {
+                    "message": "fdsa",
+                    "room": "presence-dm-fff2shaurya",
+                    "time": "2023-11-29 03:56:47.908921",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "5",
+                    "fff_read_at": "",
+                    "shaurya_read_at": "2023-11-29 03:56:47.909928"
+                },
+                "6": {
+                    "message": "ds",
+                    "room": "presence-dm-fff2shaurya",
+                    "time": "2023-11-29 03:56:48.709021",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "6",
+                    "fff_read_at": "",
+                    "shaurya_read_at": "2023-11-29 03:56:48.710019"
+                },
+                "7": {
+                    "message": "fdsa",
+                    "room": "presence-dm-fff2shaurya",
+                    "time": "2023-11-29 04:04:26.249813",
+                    "user": "shaurya",
+                    "type": "dm",
+                    "id": "7",
+                    "fff_read_at": "2023-11-29 04:08:36.262526",
+                    "shaurya_read_at": "2023-11-29 04:04:26.249813"
                 }
             },
-            "ids": 1,
+            "ids": 7,
             "type": "dm",
             "members": [
                 "fff",
                 "shaurya"
             ]
+        },
+        "presence-server-4": {
+            "messages": {
+                "1": {
+                    "message": "hi",
+                    "room": "presence-server-4",
+                    "time": "2023-11-29 04:13:10.447349",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "1",
+                    "servername": "fadsfdsa"
+                },
+                "2": {
+                    "message": "fdasfdas",
+                    "room": "presence-server-4",
+                    "time": "2023-11-29 04:13:11.895655",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "2",
+                    "servername": "fadsfdsa"
+                },
+                "3": {
+                    "message": "fdas",
+                    "room": "presence-server-4",
+                    "time": "2023-11-29 04:13:16.488814",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "3",
+                    "servername": "fadsfdsa"
+                },
+                "4": {
+                    "message": "d",
+                    "room": "presence-server-4",
+                    "time": "2023-11-29 04:13:17.303864",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "4",
+                    "servername": "fadsfdsa"
+                },
+                "5": {
+                    "message": "d",
+                    "room": "presence-server-4",
+                    "time": "2023-11-29 04:13:18.015613",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "5",
+                    "servername": "fadsfdsa"
+                },
+                "6": {
+                    "message": "asdfsfd",
+                    "room": "presence-server-4",
+                    "time": "2023-11-29 04:13:19.160017",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "6",
+                    "servername": "fadsfdsa"
+                },
+                "7": {
+                    "message": "fdsa",
+                    "room": "presence-server-4",
+                    "time": "2023-11-29 04:13:19.872087",
+                    "user": "shaurya",
+                    "type": "groupchat",
+                    "id": "7",
+                    "servername": "fadsfdsa"
+                }
+            },
+            "ids": 7,
+            "type": "groupchat",
+            "members": [
+                "shaurya"
+            ]
         }
     },
     "servers": {
-        "servers": 3,
+        "servers": 4,
         "1": {
             "members": [
                 "shaurya"
@@ -88,13 +356,21 @@
     "userdata": {
         "fff": {
             "presence-dm-fff2shaurya": {
-                "read": 1
-            }
+                "read": 7
+            },
+            "online": false
         },
         "shaurya": {
             "presence-dm-fff2shaurya": {
-                "read": 1
-            }
+                "read": 7
+            },
+            "online": false
+        },
+        "fadsf": {
+            "presence-dm-fff2shaurya": {
+                "read": 7
+            },
+            "online": false
         }
     },
     "users": {
@@ -125,6 +401,22 @@
                 "friends": [
                     "shaurya"
                 ],
+                "outgoing": [],
+                "pending": [],
+                "blocked": [],
+                "blockedby": []
+            },
+            "invincible": false,
+            "servers": [],
+            "banned": false
+        },
+        "fadsf": {
+            "usr": "fadsf",
+            "password": "709128a7d699e53141d027ed6283eff8ce100e853d90e413b1a07ea40afd5704",
+            "salt": "0789679625",
+            "admin": false,
+            "friendData": {
+                "friends": [],
                 "outgoing": [],
                 "pending": [],
                 "blocked": [],
