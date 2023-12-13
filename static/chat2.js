@@ -5,6 +5,7 @@ var pusher = new Pusher('3ee636d6edcdecffe90e', {
 });
 var socket_id = ""
 
+
 pusher.connection.bind('connected', function() {
     socket_id = pusher.connection.socket_id;
     console.log('Socket ID:', socket_id);
@@ -453,7 +454,9 @@ function linksAndImages(inputString) {
 
 
 
-
+function loadPoll(data) {
+    console.log(data)
+}
 
 
 
