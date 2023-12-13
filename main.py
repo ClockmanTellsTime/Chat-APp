@@ -23,6 +23,7 @@ pusher_client = pusher.Pusher(
 
 
 folder_path = r".\static"
+#folder_path = "/home/SillySamLikesJam/mysite/static"
 
 
 css_number = 0

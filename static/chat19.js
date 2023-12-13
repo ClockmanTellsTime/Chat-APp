@@ -604,13 +604,13 @@ setInterval(function(){
         typingSent = false
     }
 
-    if (typing && typingSent == false) {
+    if (typing && typingSent == false && chat.includes("presence")) {
         typingSent = true
 
         pusher.channel(chat).trigger("client-typing",{"user":user,"typing":true})
     }
 
-    if (typing == false && stoppedSent == false) {
+    if (typing == false && stoppedSent == false && chat.includes("presence")) {
         stoppedSent = true
 
         pusher.channel(chat).trigger("client-typing",{"user":user,"typing":false})
