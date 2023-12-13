@@ -7,6 +7,8 @@ from datetime import datetime
 import hashlib
 import hmac
 import string
+import os
+import re
 
 deleted = False
 admins = ["shaurya", "lilnasxbiggestfan"]
@@ -20,8 +22,37 @@ pusher_client = pusher.Pusher(
 )
 
 
-import json
-import re
+folder_path = r".\static"
+
+
+css_number = 0
+js_number = 0
+
+# Rename the files now
+for filename in os.listdir(folder_path):
+    if re.match(r'chat\d+\.(css|js)', filename):
+        match = re.search(r'chat(\d+)\.(css|js)', filename)
+        if match:
+            number = int(match.group(1))
+            extension = match.group(2)
+            
+            if extension == 'css':
+                css_number = max(css_number, number) + 1
+                new_filename = f"chat{css_number}.{extension}"
+            elif extension == 'js':
+                js_number = max(js_number, number) + 1
+                new_filename = f"chat{js_number}.{extension}"
+            
+            old_path = os.path.join(folder_path, filename)
+            new_path = os.path.join(folder_path, new_filename)
+            
+            os.rename(old_path, new_path)
+            print(f"Renamed {filename} to {new_filename}")
+
+
+
+
+print(css_number,js_number)
 
 
 def openDB():
@@ -177,7 +208,7 @@ def join():
   if not user or user == "":
     return redirect(url_for("signin"))
 
-  return render_template("chat.html")
+  return render_template("chat.html",css=css_number,js=js_number)
 
 
 @app.route("/createserver", methods=["POST", "GET"])
@@ -1204,4 +1235,6 @@ def write():
   return "DB Written"
 
 
-app.run(host="0.0.0.0", port=8080, debug=True)
+
+if __name__ == "__main__":
+  app.run(host="0.0.0.0", port=8080, debug=True)
