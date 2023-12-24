@@ -24,7 +24,7 @@ pusher.connection.bind('connected', function() {
         document.querySelector(".messages").innerHTML = ""
         message_ids = []
         if (Object.keys(data).length == 0) {
-            document.querySelector(".messages").innerHTML = "No Messages!"
+            document.querySelector(".messages").innerHTML = "&nbsp;No Messages!"
             return
         }
         for (var i in data) {
@@ -54,7 +54,7 @@ pusher.connection.bind('connected', function() {
     })
 
     only_you_channel.bind("message",function(data) {
-        if (document.querySelector(".messages").innerHTML == "No Messages!" || document.querySelector(".messages").innerHTML == "Loading messages...") {
+        if (document.querySelector(".messages").innerHTML == "&nbsp;No Messages!" || document.querySelector(".messages").innerHTML == "Loading messages...") {
             document.querySelector(".messages").innerHTML = ""
         }
         loadMessage(data)
@@ -137,7 +137,7 @@ function joinChat(name) {
     });
 
     chat_.bind("message",function(data) {
-        if (document.querySelector(".messages").innerHTML == "No Messages!") {
+        if (document.querySelector(".messages").innerHTML == "&nbsp;No Messages!") {
             document.querySelector(".messages").innerHTML = ""
         }
         loadMessage(data)
@@ -340,7 +340,7 @@ function loadMessage(data) {
 
     
 
-    if (document.querySelector(".messages").innerHTML == "No messages!") {
+    if (document.querySelector(".messages").innerHTML == "&nbsp;No messages!") {
         document.querySelector(".messages").innerHTML = ""
     }
 

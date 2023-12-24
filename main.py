@@ -11,6 +11,40 @@ import os
 import re
 
 
+#folder_path = r".\static"
+folder_path = "/home/SillySamLikesJam/mysite/static"
+
+
+css_number = 0
+js_number = 0
+
+# Rename the files now
+for filename in os.listdir(folder_path):
+    if re.match(r'chat\d+\.(css|js)', filename):
+        match = re.search(r'chat(\d+)\.(css|js)', filename)
+        if match:
+            number = int(match.group(1))
+            extension = match.group(2)
+            
+            if extension == 'css':
+                css_number = max(css_number, number) + 1
+                new_filename = f"chat{css_number}.{extension}"
+            elif extension == 'js':
+                js_number = max(js_number, number) + 1
+                new_filename = f"chat{js_number}.{extension}"
+            
+            old_path = os.path.join(folder_path, filename)
+            new_path = os.path.join(folder_path, new_filename)
+            
+            os.rename(old_path, new_path)
+            print(f"Renamed {filename} to {new_filename}")
+
+
+
+
+print(css_number,js_number)
+
+
 pusher_client = pusher.Pusher(
   app_id='1671920',
   key='3ee636d6edcdecffe90e',
@@ -178,7 +212,7 @@ def join():
   if not user or user == "":
     return redirect(url_for("signin"))
 
-  return render_template("chat.html")
+  return render_template("chat.html",css=css_number,js=js_number)
 
 
 @app.route("/createserver", methods=["POST", "GET"])
