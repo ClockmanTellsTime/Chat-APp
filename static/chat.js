@@ -354,7 +354,7 @@ function loadMessage(data) {
         document.querySelector(".messages").innerHTML += `
         <div class="messagee self" id="mmm${data.id}">
             <div class="messageBox self" id="m${data.id}">
-                <br><label class='messageLabel2 self'>${data.time}</label><br>
+                <label class='messageLabel2 self'>${data.time}</label><br>
                 <label class='messageLabel self'><span class="messageText">${data.message}</span></label><br><br><br>
             </div>
             <div class="messageOptions" id="mm${data.id}" style="width:${document.querySelector(".messages").clientWidth + "px"};">
