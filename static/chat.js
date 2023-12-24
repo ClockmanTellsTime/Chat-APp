@@ -103,11 +103,11 @@ pusher.connection.bind('connected', function() {
     all_your_accounts.bind("messageread",function(data) {
         if (chat == data.room) {
             if (document.querySelector(".readat") == undefined) {
-                document.querySelector("body > div.mainChat > div.messageFake > div").innerHTML += `<label class='readat self'>read at ${convertTime(data.time)}</label>`
+                document.querySelector("body > div.mainChat  > div").innerHTML += `<label class='readat self'>read at ${convertTime(data.time)}</label>`
             }
             else {
                 document.querySelector(".readat").parentNode.removeChild(document.querySelector(".readat"))
-                document.querySelector("body > div.mainChat > div.messageFake > div").innerHTML += `<label class='readat self'>read at ${convertTime(data.time)}</label>`
+                document.querySelector("body > div.mainChat  > div").innerHTML += `<label class='readat self'>read at ${convertTime(data.time)}</label>`
             }
         }
 
@@ -336,7 +336,7 @@ function loadMessage(data) {
 
     data.time = convertTime(data.time)
 
-    data.message = linksAndImages(data.message)
+    data.message = linksAndImages(data.message).replace(/&lt;br&gt;/g, '<br>').replace(/&lt;\/div&gt;/g, '</div>').replace(/&lt;div&gt;/g, '<div>')
 
     
 
@@ -347,24 +347,39 @@ function loadMessage(data) {
 
     if (blocked.includes(data.user)) {
         document.querySelector(".messages").innerHTML += "<label class='blocked'>"+data.user + "  " + data.time+"</label><br>"
-        document.querySelector(".messages").innerHTML += `<label class='messageText'><button onclick="this.parentElement.innerHTML = '${data.message.replace(/&lt;br&gt;/g, '<br>').replace(/&lt;\/div&gt;/g, '</div>').replace(/&lt;div&gt;/g, '<div>')}' ">Show message</button></label><br><br>`
+        document.querySelector(".messages").innerHTML += `<label class='messageText'><button onclick="this.parentElement.innerHTML = '${data.message}' ">Show message</button></label><br><br>`
     }
 
     else if (data.user == user) {
         document.querySelector(".messages").innerHTML += `
-        <div class="messageBox self" id="m${data.id}">
-            <label class='messageLabel'><span class="messageText">${data.message.replace(/&lt;br&gt;/g, '<br>').replace(/&lt;\/div&gt;/g, '</div>').replace(/&lt;div&gt;/g, '<div>')}</span></label><br><br>
-        </div>`
+        <div class="messagee self" id="mmm${data.id}">
+            <div class="messageBox self" id="m${data.id}">
+                <br><label class='messageLabel2 self'>${data.time}</label><br>
+                <label class='messageLabel self'><span class="messageText">${data.message}</span></label><br><br><br>
+            </div>
+            <div class="messageOptions" id="mm${data.id}" style="width:${document.querySelector(".messages").clientWidth + "px"};">
+        </div>
+        <br>
+        `
     }
 
 
     else {
         document.querySelector(".messages").innerHTML += `
-        <div class="messageBox" id="m${data.id}">
-            <label>${data.user}  ${data.time}</label><br>
-            <label class='messageLabel'><span class="messageText">${data.message.replace(/&lt;br&gt;/g, '<br>').replace(/&lt;\/div&gt;/g, '</div>').replace(/&lt;div&gt;/g, '<div>')}</span></label><br><br>
-        </div>`
+        <div class="messagee" id="mmm${data.id}">
+            <div class="messageBox" id="m${data.id}">
+                <label>${data.user}  ${data.time}</label><br>
+                <label class='messageLabel'><span class="messageText">${data.message}</span></label><br><br>
+            </div>
+            <div class="messageOptions" id="mm${data.id}" style="width:${document.querySelector(".messages").clientWidth + "px"};">
+        </div>
+        `
     }
+
+    document.querySelector(`#mm${data.id}`).style.top = document.querySelector(`#m${data.id} > label.messageLabel`).offsetTop + "px"
+    document.querySelector(`#mm${data.id}`).style.height = document.querySelector(`#m${data.id} > label.messageLabel`).offsetHeight + "px"
+    document.querySelector(`#m${data.id}`).style.height = document.querySelector(`#m${data.id} > label.messageLabel`).offsetHeight+20 + "px"
+    document.querySelector(`#mm${data.id}`).style.zIndex = "0"
 
 
     //hide the read at 
@@ -375,11 +390,11 @@ function loadMessage(data) {
 
     if (String(chat).includes("dm") && data.user == user && getOtherUserReadAt(data) != "") {
         if (document.querySelector(".readat") == undefined) {
-            document.querySelector("body > div.mainChat > div.messageFake > div").innerHTML += `<label class='readat self'>read at ${convertTime(getOtherUserReadAt(data))}</label>`
+            document.querySelector("body > div.mainChat  > div").innerHTML += `<label class='readat self'>read at ${convertTime(getOtherUserReadAt(data))}</label>`
         }
         else {
             document.querySelector(".readat").parentNode.removeChild(document.querySelector(".readat"))
-            document.querySelector("body > div.mainChat > div.messageFake > div").innerHTML += `<label class='readat self'>read at ${convertTime(getOtherUserReadAt(data))}</label>`
+            document.querySelector("body > div.mainChat  > div").innerHTML += `<label class='readat self'>read at ${convertTime(getOtherUserReadAt(data))}</label>`
         }
     }
     

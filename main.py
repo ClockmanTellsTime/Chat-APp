@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session, jsonify
+from flask import Flask, request, render_template, redirect, url_for, session, jsonify,send_from_directory
 import json
 import random
 from bs4 import BeautifulSoup
@@ -10,8 +10,6 @@ import string
 import os
 import re
 
-deleted = False
-admins = ["shaurya", "lilnasxbiggestfan"]
 
 pusher_client = pusher.Pusher(
   app_id='1671920',
@@ -20,40 +18,6 @@ pusher_client = pusher.Pusher(
   cluster='us3',
   ssl=True
 )
-
-
-folder_path = r".\static"
-#folder_path = "/home/SillySamLikesJam/mysite/static"
-
-
-css_number = 0
-js_number = 0
-
-# Rename the files now
-for filename in os.listdir(folder_path):
-    if re.match(r'chat\d+\.(css|js)', filename):
-        match = re.search(r'chat(\d+)\.(css|js)', filename)
-        if match:
-            number = int(match.group(1))
-            extension = match.group(2)
-            
-            if extension == 'css':
-                css_number = max(css_number, number) + 1
-                new_filename = f"chat{css_number}.{extension}"
-            elif extension == 'js':
-                js_number = max(js_number, number) + 1
-                new_filename = f"chat{js_number}.{extension}"
-            
-            old_path = os.path.join(folder_path, filename)
-            new_path = os.path.join(folder_path, new_filename)
-            
-            os.rename(old_path, new_path)
-            print(f"Renamed {filename} to {new_filename}")
-
-
-
-
-print(css_number,js_number)
 
 
 def openDB():
@@ -68,9 +32,6 @@ def writeDB(data):
   with open("data.json", 'w') as f:
     json.dump(data, f, indent=4)
 
-
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "432178i784321789hcer7fncsansdjfd8h3e9823he"
 
 
 db = openDB()
@@ -106,12 +67,12 @@ def hash_string(string_to_hash):
     
     return hashed_string
 
-def generate_random_string():
+def generate_random_string(n=10):
     # Define the characters to choose from for the random string
     characters = string.digits  # Use digits for a 10-digit string
     
     # Generate a random 10-character string
-    random_string = ''.join(random.choice(characters) for _ in range(10))
+    random_string = ''.join(random.choice(characters) for _ in range(n))
     
     return random_string
 
@@ -137,8 +98,18 @@ def generate_hmac_sha256(message):
     
     return hmac_hexdigest
 
+app = Flask(__name__)
+app.config["SECRET_KEY"] = generate_random_string(20)
 
 
+@app.route('/chat.js')
+def send_js():
+    return send_from_directory('static', 'chat.js')
+
+
+@app.route('/chat.css')
+def send_css():
+    return send_from_directory('static', 'chat.css')
 
 
 @app.route("/webhook", methods=['POST'])
@@ -201,15 +172,13 @@ def pusher_webhook():
 
 @app.route("/", methods=["POST", "GET"])
 def join():
-  #return render_template("index.html")
-  global deleted
 
   user = session.get("user")
 
   if not user or user == "":
     return redirect(url_for("signin"))
 
-  return render_template("chat.html",css=css_number,js=js_number)
+  return render_template("chat.html")
 
 
 @app.route("/createserver", methods=["POST", "GET"])

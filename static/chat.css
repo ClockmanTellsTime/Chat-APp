@@ -1,6 +1,20 @@
 body {
     overflow: hidden;
 }
+
+.messagee:hover .messageOptions {
+    display: block;
+    transition: 0ms;
+
+}
+
+.messagee {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .top {
     position: absolute;
     background-color: black;
@@ -13,7 +27,7 @@ body {
 }
 
 .typingDisplay {
-    background-color: rgb(0, 162, 255);
+    background-color: rgba(0, 162, 255, 0.52);
     display: none;
     position: absolute;
     width: 100%;
@@ -24,7 +38,11 @@ body {
     user-select: none;
 
     justify-content: center;
+    align-items: center;
 }
+
+
+
 .controls {
     display: flex;
     position: absolute;
@@ -38,23 +56,16 @@ body {
 
     justify-content: center;
 }
-.messageFake {
+
+
+.messages {
     position: absolute;
     background-color: white;
     height: 90%;
     width: 100%;
-}
-
-.messages {
-    position: relative;
-    height: 100%;
-    width: 100%;
     right: 0px;
-    padding-left: 10px;
     word-wrap: break-word;
     overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
 }
 .message {
     position: relative !important;
@@ -66,9 +77,7 @@ body {
 
     border-width: 0px !important;
 }
-.message {
-    width: 70%;
-}
+
 .name {
     width: 10%;
 }
@@ -128,9 +137,6 @@ body {
     height: 20px !important; 
 }
 
-.messageText {
-    font-size: 20px;
-}
 
 
 .mainChat {
@@ -350,12 +356,7 @@ body {
 }
 
 
-.messageLabel {
-    display: inline-block; /* Ensure the label's width is based on its content */
-    background-color: rgb(0, 162, 255);
-    padding: 5px 10px;
-    border-radius: 10px;
-}
+
 
 .red {
     background-color: red !important;
@@ -366,21 +367,47 @@ body {
     background-color: inherit;
     padding: 5px 10px;
     border-radius: 10px;
+    font-size: 20px;
 }
 
   
-  /* Style for self messages */
-  .messageBox.self {
-    margin-left: auto;
+  .messageBox {
+    position: relative;
+    width: 100%;
     padding: 8px 12px;
     border-radius: 10px;
+    top:100%;
+    padding: 5px 10px;
   }
 
-  .messageBox:not(.self) {
-    margin-right: auto;
-    padding: 8px 12px;
+  
+.messageOptions {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 20px;
+
+    background-color: rgba(14, 129, 230, 0.494);
+}
+
+  .messageLabel {
+    display: inline-block; /* Ensure the label's width is based on its content */
+    background-color: rgb(0, 162, 255);
+    padding: 5px 10px;
     border-radius: 10px;
-  }
+    }
+
+    .messageLabel.self, .messageLabel2.self {
+        position: absolute;
+        right: 30px;
+    }
+
+    .readat.self {
+        position: absolute;
+        right: 0px;
+    }
+
+
 
   label.self {
     margin-left: auto;
