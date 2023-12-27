@@ -40,8 +40,6 @@ for filename in os.listdir(folder_path):
             print(f"Renamed {filename} to {new_filename}")
 
 
-
-
 print(css_number,js_number)
 
 
@@ -134,16 +132,6 @@ def generate_hmac_sha256(message):
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = generate_random_string(20)
-
-
-@app.route('/chat.js')
-def send_js():
-    return send_from_directory('static', 'chat.js')
-
-
-@app.route('/chat.css')
-def send_css():
-    return send_from_directory('static', 'chat.css')
 
 
 @app.route("/webhook", methods=['POST'])
