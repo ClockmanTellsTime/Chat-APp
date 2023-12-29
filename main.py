@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session, jsonify,send_from_directory
+from flask import Flask, request, render_template, redirect, url_for, session, jsonify, Response
 import json
 import random
 from bs4 import BeautifulSoup
@@ -9,38 +9,32 @@ import hmac
 import string
 import os
 import re
+import time
+
+folder_path = "static"
+
+a = str(time.time())
+
+css_number = a
+js_number = a
 
 
-#folder_path = r".\static"
-folder_path = "/home/SillySamLikesJam/mysite/static"
-
-
-css_number = 0
-js_number = 0
 
 # Rename the files now
 for filename in os.listdir(folder_path):
-    if re.match(r'chat\d+\.(css|js)', filename):
-        match = re.search(r'chat(\d+)\.(css|js)', filename)
-        if match:
-            number = int(match.group(1))
-            extension = match.group(2)
-            
-            if extension == 'css':
-                css_number = max(css_number, number) + 1
-                new_filename = f"chat{css_number}.{extension}"
-            elif extension == 'js':
-                js_number = max(js_number, number) + 1
-                new_filename = f"chat{js_number}.{extension}"
-            
-            old_path = os.path.join(folder_path, filename)
-            new_path = os.path.join(folder_path, new_filename)
-            
-            os.rename(old_path, new_path)
-            print(f"Renamed {filename} to {new_filename}")
-
-
-print(css_number,js_number)
+    if  str(filename).startswith("chat"):
+          extension = filename.split(".")[2]
+          
+          if extension == 'css':
+              new_filename = f"chat{css_number}.{extension}"
+          elif extension == 'js':
+              new_filename = f"chat{js_number}.{extension}"
+          
+          old_path = os.path.join(folder_path, filename)
+          new_path = os.path.join(folder_path, new_filename)
+          
+          os.rename(old_path, new_path)
+          print(f"Renamed {filename} to {new_filename}")
 
 
 pusher_client = pusher.Pusher(
@@ -132,6 +126,8 @@ def generate_hmac_sha256(message):
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = generate_random_string(20)
+
+
 
 
 @app.route("/webhook", methods=['POST'])
@@ -988,8 +984,7 @@ def get_friends():
     data = request.json
     socket_id = data.get("socket_id","")
     user = session.get("user")
-
-    print("d")
+    
     pusher_client.trigger("private-socket_id-"+socket_id,"friends",db["users"][user]["friendData"])
 
     #show all dms!
