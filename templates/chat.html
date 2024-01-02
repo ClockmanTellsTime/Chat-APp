@@ -39,11 +39,18 @@
             
         </div>
         <a href="/friends"><button class="friendsMenu">Friends (999+)</button></a>
+
+        <div class="optionsmenu">
+            <a href="/logout"><button class="logout">log out <i class="fa fa-sign-out"></i></button></a><br>
+            <a href="/settings"><button class="settings">Settings <i class="fa fa-gear"></i></button></a>
+        </div>
         <div class="tag">
             <div class="username">
                 <label class="nameDisplay">{{session.get("user")}}</label>
             </div>
-            <a href="/logout"><button class="logout">Log out <i class="fa fa-sign-out"></i></button></a>
+            <button class="options">
+                <i class="fa fa-gear"></i>
+            </button>
         </div>
     </div>
 

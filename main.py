@@ -873,6 +873,19 @@ def authenticate_channel(user,name,id):
     return True
 
 
+@app.route('/settings', methods=['GET',"POST"])
+def settings():
+    return render_template("settings.html")
+
+
+@app.route('/profile/<usr>', methods=['GET',"POST"])
+def profile(usr):
+    if usr in db["users"].keys():
+      return "Profile for " + usr
+    else:
+        return "user not found!"
+
+
 @app.route('/pusher/user-auth', methods=['POST'])
 def pusher_auth_user():
     socket_id = request.form['socket_id']

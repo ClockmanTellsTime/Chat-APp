@@ -54,7 +54,7 @@ pusher.connection.bind('connected', function() {
     })
 
     only_you_channel.bind("message",function(data) {
-        if (document.querySelector(".messages").innerHTML == "&nbsp;No Messages!" || document.querySelector(".messages").innerHTML == "Loading messages...") {
+        if (document.querySelector(".messages").innerHTML == "&nbsp;No Messages!") {
             document.querySelector(".messages").innerHTML = ""
         }
         loadMessage(data)
@@ -466,21 +466,6 @@ function linksAndImages(inputString) {
   return replacedString;
 }
 
-
-
-
-
-
-
-
-function loadPoll(data) {
-    console.log(data)
-}
-
-
-
-
-
 function sendMessage() {
     var message = replaceImageTagsWithEmoji(document.querySelector(".emojionearea-editor").innerHTML)
     document.querySelector(".emojionearea-editor").innerHTML
@@ -499,7 +484,7 @@ function sendMessage() {
 
 
 function selectChat(friend) {
-    document.querySelector(".messages").innerHTML = "Loading messages..."
+    document.querySelector(".messages").innerHTML = ""
     joinChat(friend)
     chat = friend
 
@@ -687,13 +672,13 @@ function getOtherUserReadAt(data) {
 
 
 
+  document.querySelector(".options").onclick = () => {
+    var e = document.querySelector('.optionsmenu')
 
-// var a = setInterval(function() {
-//     if (document.querySelector(".emojionearea") != undefined) {
-//         clearInterval(a)
-//         document.querySelector(".emojionearea").innerHTML += `
-//         <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png " width="20" height="20" alt="" title="" class="controller">
-//         <img src="https://cdn-icons-png.flaticon.com/512/9131/9131514.png" width="20" height="20" alt="Poll free icon" title="Poll free icon" class="polls">
-//         `
-//     }
-// },100)
+    if (e.style.display == "flex") {
+        e.style.display = "none"
+    }
+    else {
+        e.style.display = "flex"
+    }
+  }
