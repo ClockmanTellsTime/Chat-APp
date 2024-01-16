@@ -998,22 +998,21 @@ def get_messages():
 
       except:
         try:
-          message_keys = list(db["chatData"][room]["messages"].keys())[-50:]
 
           # Send the first 10 messages
-          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in message_keys[-50:-40]})
+          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in list(db["chatData"][room]["messages"].keys())[-50:-40]})
 
           # Send the next 10 messages
-          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in message_keys[-40:-30]})
+          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in list(db["chatData"][room]["messages"].keys())[-40:-30]})
 
           # Send the next 10 messages
-          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in message_keys[-30:-20]})
+          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in list(db["chatData"][room]["messages"].keys())[-30:-20]})
 
           # Send the next 10 messages
-          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in message_keys[-20:-10]})
+          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in list(db["chatData"][room]["messages"].keys())[-20:-10]})
 
           # Send the last 10 messages
-          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in message_keys[-10:]})
+          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in list(db["chatData"][room]["messages"].keys())[-10:]})
       
         except:
           for message in list(db["chatData"][room]["messages"])[-50:]:

@@ -34,6 +34,7 @@ pusher.connection.bind('connected', function() {
     })
 
     only_you_channel.bind("messages-batched",function(data) {
+        message_ids = []
         if (Object.keys(data).length == 0) {
             document.querySelector(".messages").innerHTML = "&nbsp;No Messages!"
             return
@@ -69,6 +70,7 @@ pusher.connection.bind('connected', function() {
     })
 
     only_you_channel.bind("message",function(data) {
+        console.log(data)
         if (document.querySelector(".messages").innerHTML == "&nbsp;No Messages!") {
             document.querySelector(".messages").innerHTML = ""
         }
