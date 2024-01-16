@@ -11,6 +11,21 @@ body {
     transition: 0ms;
 }
 
+.showMessage {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.block_ed {
+    background-color: red !important;
+}
+
+.blockk_ed {
+    background-color: rgba(255, 0, 0, 0.335) !important;
+}
+
 button {
     cursor: pointer;
 }
@@ -105,6 +120,7 @@ button {
     right: 0px;
     word-wrap: break-word;
     overflow-x: hidden;
+    z-index: -2;
 }
 .message {
     position: relative !important;
@@ -186,6 +202,7 @@ button {
     right: 0;
     top: 0;
     border: 1px black solid;
+    z-index: -3;
 }
 
 

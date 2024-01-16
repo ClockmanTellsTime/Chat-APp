@@ -331,6 +331,20 @@ function convertTime(inputTime) {
 
 var message_ids = []
 
+function loadBlockedMessage(message,id,user,time) {
+    
+    document.querySelector(`#m${id}`).innerHTML = `
+    <label>${user}  ${time}</label><br>
+    <label class='messageLabel block_ed'><span class="messageText">${message}</span></label><br><br>
+    `
+
+    document.querySelector(`#mm${id}`).style.top = document.querySelector(`#m${id} > label.messageLabel`).offsetTop + "px"
+    document.querySelector(`#mm${id}`).style.height = document.querySelector(`#m${id} > label.messageLabel`).offsetHeight + "px"
+    document.querySelector(`#m${id}`).style.height = document.querySelector(`#m${id} > label.messageLabel`).offsetHeight+20 + "px"
+    document.querySelector(`#mm${id}`).style.zIndex = "-1"
+}
+
+
 function loadMessage(data) {
     
 
@@ -350,8 +364,23 @@ function loadMessage(data) {
 
 
     if (blocked.includes(data.user)) {
-        document.querySelector(".messages").innerHTML += "<label class='blocked'>"+data.user + "  " + data.time+"</label><br>"
-        document.querySelector(".messages").innerHTML += `<label class='messageText'><button onclick="this.parentElement.innerHTML = '${data.message}' ">Show message</button></label><br><br>`
+        // document.querySelector(".messages").innerHTML += "<label class='blocked'>"+data.user + "  " + data.time+"</label><br>"
+        //document.querySelector(".messages").innerHTML += `<label class='messageText'><button class="showMessage" onclick="this.parentElement.innerHTML = '${data.message}' ">Show message</button></label><br><br>`
+
+        document.querySelector(".messages").innerHTML += `
+        <div class="messagee" id="mmm${data.id}">
+            <div class="messageBox" id="m${data.id}">
+                <label>${data.user}  ${data.time}</label><br>
+                <button class="showMessage" onclick="loadBlockedMessage('${data.message}','${data.id}','${data.user}','${data.time}')">Show message</button>
+            </div>
+            <div class="messageOptions blockk_ed" id="mm${data.id}" style="width:${document.querySelector(".messages").clientWidth + "px"};">
+        </div>
+        `
+
+        document.querySelector(`#mm${data.id}`).style.top = document.querySelector(`#m${data.id} > button`).offsetTop + "px"
+        document.querySelector(`#mm${data.id}`).style.height = document.querySelector(`#m${data.id} > button`).offsetHeight + "px"
+        document.querySelector(`#m${data.id}`).style.height = document.querySelector(`#m${data.id} > button`).offsetHeight+20 + "px"
+        document.querySelector(`#mm${data.id}`).style.zIndex = "-1"
     }
 
     else if (data.user == user) {
@@ -365,6 +394,11 @@ function loadMessage(data) {
         </div>
         <br>
         `
+
+        document.querySelector(`#mm${data.id}`).style.top = document.querySelector(`#m${data.id} > label.messageLabel`).offsetTop + "px"
+        document.querySelector(`#mm${data.id}`).style.height = document.querySelector(`#m${data.id} > label.messageLabel`).offsetHeight + "px"
+        document.querySelector(`#m${data.id}`).style.height = document.querySelector(`#m${data.id} > label.messageLabel`).offsetHeight+20 + "px"
+        document.querySelector(`#mm${data.id}`).style.zIndex = "-1"
     }
 
 
@@ -378,12 +412,13 @@ function loadMessage(data) {
             <div class="messageOptions" id="mm${data.id}" style="width:${document.querySelector(".messages").clientWidth + "px"};">
         </div>
         `
+
+        document.querySelector(`#mm${data.id}`).style.top = document.querySelector(`#m${data.id} > label.messageLabel`).offsetTop + "px"
+        document.querySelector(`#mm${data.id}`).style.height = document.querySelector(`#m${data.id} > label.messageLabel`).offsetHeight + "px"
+        document.querySelector(`#m${data.id}`).style.height = document.querySelector(`#m${data.id} > label.messageLabel`).offsetHeight+20 + "px"
+        document.querySelector(`#mm${data.id}`).style.zIndex = "-1"
     }
 
-    document.querySelector(`#mm${data.id}`).style.top = document.querySelector(`#m${data.id} > label.messageLabel`).offsetTop + "px"
-    document.querySelector(`#mm${data.id}`).style.height = document.querySelector(`#m${data.id} > label.messageLabel`).offsetHeight + "px"
-    document.querySelector(`#m${data.id}`).style.height = document.querySelector(`#m${data.id} > label.messageLabel`).offsetHeight+20 + "px"
-    document.querySelector(`#mm${data.id}`).style.zIndex = "0"
 
 
     //hide the read at 
