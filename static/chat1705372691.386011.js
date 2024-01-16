@@ -33,6 +33,21 @@ pusher.connection.bind('connected', function() {
         document.querySelector(".messages").scrollTo(0, document.querySelector(".messages").scrollHeight);
     })
 
+    only_you_channel.bind("messages-batched",function(data) {
+        if (Object.keys(data).length == 0) {
+            document.querySelector(".messages").innerHTML = "&nbsp;No Messages!"
+            return
+        }
+        if (document.querySelector(".messages").innerHTML == "&nbsp;No Messages!") {
+            document.querySelector(".messages").innerHTML = ""
+        }
+        
+        for (var i in data) {
+            loadMessage(data[i])
+        }
+        document.querySelector(".messages").scrollTo(0, document.querySelector(".messages").scrollHeight);
+    })
+
     only_you_channel.bind("friends",function(data) {
         loadFriends(data)
     })
@@ -115,8 +130,6 @@ pusher.connection.bind('connected', function() {
 
     })
 
-
-    
     setTimeout(function(){
         joinChat("global")
         sendDataToServer("get-friends",{"socket_id":socket_id})
@@ -148,11 +161,12 @@ function joinChat(name) {
     })
 
     chat_.bind("client-typing",function(data) {
-
+        console.log(data)
         var box = document.querySelector(".typingDisplay")
 
         if (data.typing == true) {
             box.style.display = "flex"
+            box.innerHTML = `${data.user} is typing...`
         }
         else {
             box.style.display = "none"
@@ -168,7 +182,7 @@ function joinChat(name) {
     
     sendDataToServer("get-messages",{
         "room":name,
-        "socket_id":socket_id
+        "socket_id":socket_id,
     })
 }
 
@@ -245,7 +259,8 @@ function loadServers(data) {
         }
     }
 
-    selectChat(chat, formatFriendName(chat))
+    //selectChat(chat, formatFriendName(chat))
+    chooseChat(formatFriendName(chat))
 
 
 
@@ -513,7 +528,7 @@ function sendMessage() {
     if (document.querySelector(".readat") != undefined){
         document.querySelector(".readat").parentNode.removeChild(document.querySelector(".readat"))
     }
-
+    document.querySelector(".wordsDisplay").style.display = "none"
 }
 
 
@@ -712,8 +727,15 @@ function getOtherUserReadAt(data) {
 
     if (e.style.display == "flex") {
         e.style.display = "none"
+        document.querySelector(".options > i").className = "fa fa-bars"
     }
     else {
         e.style.display = "flex"
+        document.querySelector(".options > i").className = "fa fa-x"
     }
   }
+
+
+
+
+

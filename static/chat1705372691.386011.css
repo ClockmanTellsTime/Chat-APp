@@ -95,7 +95,25 @@ button {
     align-items: center;
 }
 
+.red {
+    color: red;
+}
 
+.wordsDisplay {
+    color: white;
+    background-color: rgba(6, 47, 71, 0.52);
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 5%;
+    bottom: 10%;
+    left: 0px;
+    text-align: center;
+    user-select: none;
+
+    justify-content: center;
+    align-items: center;
+}
 
 .controls {
     display: flex;

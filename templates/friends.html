@@ -172,7 +172,6 @@
         var all_your_accounts = pusher.subscribe("private-user-"+user)
 
         only_you_channel.bind("friends",function(data) {
-            console.log("d")
             loadFriends(data)
         })
 

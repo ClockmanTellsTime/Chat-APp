@@ -28,6 +28,9 @@
         <div class="typingDisplay">
             typing..
         </div>
+        <div class="wordsDisplay">
+            2500 characters
+        </div>
         <div class="controls">
     
             <input type="text" class="message" placeholder="Say Something Amazing!"> 
@@ -49,7 +52,7 @@
                 <label class="nameDisplay">{{session.get("user")}}</label>
             </div>
             <button class="options">
-                <i class="fa fa-gear"></i>
+                <i class="fa fa-bars"></i>
             </button>
         </div>
     </div>
@@ -64,5 +67,44 @@
 
     $(document).ready(function() {
         $(".message").emojioneArea();
+        
+        setTimeout(function(){
+            document.querySelector(".emojionearea-editor").addEventListener("input",function(e){
+
+            if (replaceImageTagsWithEmoji(document.querySelector(".emojionearea-editor").innerHTML).length != 0) {
+                document.querySelector(".wordsDisplay").innerHTML = (2500 - replaceImageTagsWithEmoji(document.querySelector(".emojionearea-editor").innerHTML).length) + " characters left"
+                document.querySelector(".wordsDisplay").style.display = "block"
+                document.querySelector(".wordsDisplay").classList.remove("red")
+            }
+
+            if (replaceImageTagsWithEmoji(document.querySelector(".emojionearea-editor").innerHTML).length > 2500) {
+                document.querySelector(".wordsDisplay").classList.add("red")
+            }
+            if (replaceImageTagsWithEmoji(document.querySelector(".emojionearea-editor").innerHTML).length == 0) {
+                document.querySelector(".wordsDisplay").style.display = "none"
+                document.querySelector(".wordsDisplay").classList.remove("red")
+            }
+
+
+            })
+        },1000)
     });
+
+
+    // setTimeout(function() {
+    //     var MESSAGES = '{{MESSAGES}}'
+    //     MESSAGES = JSON.parse( MESSAGES.replace(/&#39;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>'))
+    //     console.log(MESSAGES)
+
+    //     document.querySelector(".messages").innerHTML = ""
+    //     message_ids = []
+    //     if (Object.keys(MESSAGES).length == 0) {
+    //         document.querySelector(".messages").innerHTML = "&nbsp;No Messages!"
+    //         return
+    //     }
+    //     for (var i in MESSAGES) {
+    //         loadMessage(MESSAGES[i])
+    //     }
+    //     document.querySelector(".messages").scrollTo(0, document.querySelector(".messages").scrollHeight);
+    // },100)
 </script>

@@ -196,7 +196,7 @@ def join():
   if not user or user == "":
     return redirect(url_for("signin"))
 
-  return render_template("chat.html",css=css_number,js=js_number)
+  return render_template("chat.html",css=css_number,js=js_number,MESSAGES=db["chatData"]["global"]["messages"])
 
 
 @app.route("/createserver", methods=["POST", "GET"])
@@ -934,6 +934,7 @@ def get_usernames(string):
         return None, None  # Return None if the string format doesn't match
 
 
+
 @app.route('/get-messages', methods=['POST'])
 def get_messages():
     data = request.json
@@ -943,6 +944,8 @@ def get_messages():
     user = session.get("user")
 
     session["room"] = room
+
+    print(room,socket_id)
 
     if not room in db["chatData"]:
         if "server" in str(room):
@@ -963,11 +966,13 @@ def get_messages():
                 "members": get_usernames(room),
             }
 
-
+    print("got here x1")
 
     if "dm-" in room or "server-" in room:
         if not user in db["chatData"][room]["members"]:
             return True
+
+    print("got here x2")
 
     if "-dm" in str(room):
       #update messages read in that thing
@@ -981,13 +986,39 @@ def get_messages():
           "read": db["chatData"][room]["ids"]
       }
 
+    print("got here x3")
 
     try:
-      pusher_client.trigger("private-socket_id-"+socket_id,"messages",db["chatData"][room]["messages"])
+      pusher_client.trigger("private-socket_id-"+socket_id,"messages",{key: db["chatData"][room]["messages"][key] for key in list(db["chatData"][room]["messages"].keys())[-50:]})
+    
     except:
-        for message in db["chatData"][room]["messages"]:
-          data = db["chatData"][room]["messages"][message]
-          pusher_client.trigger("private-socket_id-"+socket_id,"message",data)
+      try:
+        pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in list(db["chatData"][room]["messages"].keys())[-50:-25]})
+        pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in list(db["chatData"][room]["messages"].keys())[-25:]})
+
+      except:
+        try:
+          message_keys = list(db["chatData"][room]["messages"].keys())[-50:]
+
+          # Send the first 10 messages
+          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in message_keys[-50:-40]})
+
+          # Send the next 10 messages
+          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in message_keys[-40:-30]})
+
+          # Send the next 10 messages
+          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in message_keys[-30:-20]})
+
+          # Send the next 10 messages
+          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in message_keys[-20:-10]})
+
+          # Send the last 10 messages
+          pusher_client.trigger("private-socket_id-"+socket_id, "messages-batched", {key: db["chatData"][room]["messages"][key] for key in message_keys[-10:]})
+      
+        except:
+          for message in list(db["chatData"][room]["messages"])[-50:]:
+            data = db["chatData"][room]["messages"][message]
+            pusher_client.trigger("private-socket_id-"+socket_id,"message",data)
 
     writeDB(db)
     return "ok"
@@ -1227,12 +1258,6 @@ def read_message():
     writeDB(db)
     return "ok"
 
-
-
-@app.route("/writeDB/", methods=["POST", "GET"])
-def write():
-  writeDB(db)
-  return "DB Written"
 
 
 
