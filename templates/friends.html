@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Friends</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         body {
             display: flex;
@@ -14,10 +15,39 @@
         .nav {
             position: absolute;
             width: 25%;
-            height: 10%;
+            height: 100%;
             top: 0%;
         }
+
+        .nav:hover {
+            transform: translate(0,-20%);
+            background-color: #003152;
+            transition: 0.5s;
+        }
+
+        .pending {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         
+
+        .notifications {
+    position: relative;
+    width: 25px;
+    height: 25px;
+
+    text-align: center;
+
+    line-height: 25px;
+
+    background-color: red;
+
+    border-radius: 10px;
+    margin-right: 25px; 
+}
+
+
         .nav:nth-child(1) {
             left: 0%;
         }
@@ -44,9 +74,10 @@
         .content {
             position: absolute;
             width: 100%;
-            height: 90%;
-            bottom: 0%;
+            height: 80%;
+            bottom: 11%;
             left: 0px;
+            overflow-y: scroll;
         }
 
 
@@ -75,6 +106,7 @@
             width: 80%;
             left: 10%;
             border-radius: 5px;
+            line-height: 10%;
         }
 
 
@@ -94,9 +126,30 @@
             transform: translate(-50%,0%);
         }
 
+        .loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0%;
+            left: 0%;
+            background-color: rgba(0, 162, 255);
+            color: black;
+            z-index: 15;
+        }
+
+        .tip {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: 25px;
+        }
+
         .options {
             position: absolute;
             right: 5%;
+            top: 50%;
+            transform: translate(0%,-50%);
         }
 
         .btn {
@@ -108,15 +161,27 @@
             font-size: 16px; /* Set a font size */
             cursor: pointer; /* Mouse pointer on hover */
 
-            right: 0px;
-            bottom: 0px;
+            left: 10px;
+            top: 10px;
+        }
+
+        .navbar {
+            position: absolute;
+            height: 10%;
+            width: 100%;
+            top: 90%;
+            left: 0%;
+            background-color: black;
+            z-index: 10;
         }
 
     </style>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 </head>
 <body>
-
+    <div class="loading">
+        <label for="" class="tip">loading...</label>
+    </div>
     <div class="navbar">
         <button class="friends nav view1button">Friends (999+)</button>
         <button class="outgoing nav view2button" >Outgoing Friend Requests (999+)</button>
@@ -144,7 +209,7 @@
         </div>
     </div>
 
-    <button class="btn"><i class="fa fa-home"></i> Home</button>
+    <button class="btn"><i class="fa fa-arrow-left"></i> </button>
 </body>
 </html>
 
@@ -182,6 +247,10 @@
         setTimeout(function(){
             sendDataToServer("get-friends",{"socket_id":socket_id})
         },1000)
+
+        setTimeout(function() {
+            document.querySelector(".loading").style.display = "none"
+        },1500)
     });
     
     function sendDataToServer(endpoint,data) {
@@ -292,7 +361,7 @@
                 </div>`
         }
 
-        document.querySelector(".friends").innerHTML = `Friends (${data['friends'].length})`
+        document.querySelector(".friends").innerHTML = `Friends`
 
         document.querySelector(".view2").innerHTML = ""
         for (var i of data['outgoing']) {
@@ -305,7 +374,7 @@
                 </div>`
         }
 
-        document.querySelector(".outgoing").innerHTML = `Outgoing Friend Requests (${data['outgoing'].length})`
+        document.querySelector(".outgoing").innerHTML = `Outgoing Friend Requests`
 
         document.querySelector(".view3").innerHTML = ""
 
@@ -322,8 +391,13 @@
         }
         
 
-        document.querySelector(".pending").innerHTML = `Pending Friend Requests (${data['pending'].length})`
+        document.querySelector(".pending").innerHTML = `Pending Friend requests`
         
+
+        if (data['pending'].length > 0) {
+            document.querySelector(".pending").innerHTML = `<div class="notifications">${data['pending'].length}</div>Pending Friend requests`
+        }
+
         document.querySelector(".blocked").innerHTML = ""
         for (var i of data['blocked']) {
             document.querySelector(".blocked").innerHTML += 
@@ -335,7 +409,7 @@
                 </div>`
         }
 
-        document.querySelector(".block").innerHTML  = `Blocked Users (${data['blocked'].length})`
+        document.querySelector(".block").innerHTML  = `Blocked Users`
     }
 
     document.querySelector(".sendRequest").onclick = () => {

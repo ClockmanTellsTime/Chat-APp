@@ -61,7 +61,6 @@ def writeDB(data):
 
 
 db = openDB()
-db["chatData"]["global"]["messages"] = {}
 writeDB(db)
 
 #Clear rooms in the thing

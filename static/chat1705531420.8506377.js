@@ -70,7 +70,6 @@ pusher.connection.bind('connected', function() {
     })
 
     only_you_channel.bind("message",function(data) {
-        console.log(data)
         if (document.querySelector(".messages").innerHTML == "&nbsp;No Messages!") {
             document.querySelector(".messages").innerHTML = ""
         }
@@ -81,7 +80,6 @@ pusher.connection.bind('connected', function() {
         if (data["user"] == formatFriendName(chat)) {return false}
         if (data["amount"] == 0) {return false}
         
-        console.log('s')
         addNotification(data["user"], data["amount"])
     })
 
@@ -93,7 +91,6 @@ pusher.connection.bind('connected', function() {
 
     only_you_channel.bind("whosonline",function(data) {
         var thing = document.querySelector(`.${data.user}OnlineDisplay`)
-        console.log(`.${data.user}OnlineDisplay`)
 
         if (data.online) {
             thing.style.backgroundColor = "green"
@@ -105,7 +102,6 @@ pusher.connection.bind('connected', function() {
 
     all_your_accounts.bind("whosonline",function(data) {
         var thing = document.querySelector(`.${data.user}OnlineDisplay`)
-        console.log(`.${data.user}OnlineDisplay`)
 
         if (data.online) {
             thing.style.backgroundColor = "green"
@@ -163,7 +159,6 @@ function joinChat(name) {
     })
 
     chat_.bind("client-typing",function(data) {
-        console.log(data)
         var box = document.querySelector(".typingDisplay")
 
         if (data.typing == true) {
@@ -236,7 +231,7 @@ function loadFriends(data) {
     document.querySelector(".friendsMenu").innerHTML = `<div class='nameDisplay'>Friends</div>`
 
     if (friendRequests > 0) {
-        document.querySelector(".friendsMenu").innerHTML += `<div class="notifications">${friendRequests}</div>`
+        document.querySelector(".friendsMenu").innerHTML += `<div class="friendnotifications">${friendRequests}</div>`
     }
 }
 function loadServers(data) {
@@ -348,12 +343,11 @@ function convertTime(inputTime) {
 
 var message_ids = []
 
-function loadBlockedMessage(message,id,user,time) {
+function loadBlockedMessage(id) {
     
-    document.querySelector(`#m${id}`).innerHTML = `
-    <label>${user}  ${time}</label><br>
-    <label class='messageLabel block_ed'><span class="messageText">${message}</span></label><br><br>
-    `
+    document.querySelector(`#m${id} > .messageLabel`).style.display = "inline-block"
+
+    document.querySelector(`#m${id} > .showMessage`).style.display = "none"
 
     document.querySelector(`#mm${id}`).style.top = document.querySelector(`#m${id} > label.messageLabel`).offsetTop + "px"
     document.querySelector(`#mm${id}`).style.height = document.querySelector(`#m${id} > label.messageLabel`).offsetHeight + "px"
@@ -388,7 +382,8 @@ function loadMessage(data) {
         <div class="messagee" id="mmm${data.id}">
             <div class="messageBox" id="m${data.id}">
                 <label>${data.user}  ${data.time}</label><br>
-                <button class="showMessage" onclick="loadBlockedMessage('${data.message}','${data.id}','${data.user}','${data.time}')">Show message</button>
+                <button class="showMessage" onclick="loadBlockedMessage('${data.id}')">Show message</button>
+                <label class='messageLabel block_ed' style="display: none;"><span class="messageText">${data.message}</span></label><br><br>
             </div>
             <div class="messageOptions blockk_ed" id="mm${data.id}" style="width:${document.querySelector(".messages").clientWidth + "px"};">
         </div>
@@ -729,12 +724,10 @@ function getOtherUserReadAt(data) {
 
     if (e.style.display == "flex") {
         e.style.display = "none"
-        document.querySelector(".options > i").className = "fa fa-bars"
     }
     else {
         e.style.display = "flex"
-        document.querySelector(".options > i").className = "fa fa-x"
-    }
+        }
   }
 
 
