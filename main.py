@@ -690,6 +690,23 @@ def friendrequest():
 
   pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
+
+  dms = get_dms(user)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+user,"dm",dm)
+
+  online_people = get_online_friends(user)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+user,"whosonline",online_person)
+
+  dms = get_dms(friend)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+friend,"dm",dm)
+
+  online_people = get_online_friends(friend)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+friend,"whosonline",online_person)
+  
   writeDB(db)
   return "ok"
 
@@ -734,6 +751,22 @@ def blockuser():
 
   pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
+
+  dms = get_dms(user)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+user,"dm",dm)
+
+  online_people = get_online_friends(user)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+user,"whosonline",online_person)
+
+  dms = get_dms(friend)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+friend,"dm",dm)
+
+  online_people = get_online_friends(friend)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+friend,"whosonline",online_person)
   writeDB(db)
   return "ok"
 
@@ -755,6 +788,21 @@ def removefriend():
 
   pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
+  dms = get_dms(user)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+user,"dm",dm)
+
+  online_people = get_online_friends(user)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+user,"whosonline",online_person)
+
+  dms = get_dms(friend)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+friend,"dm",dm)
+
+  online_people = get_online_friends(friend)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+friend,"whosonline",online_person)
   writeDB(db)
   return "ok"
 
@@ -777,6 +825,22 @@ def unblockuser():
   
   pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
+
+  dms = get_dms(user)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+user,"dm",dm)
+
+  online_people = get_online_friends(user)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+user,"whosonline",online_person)
+
+  dms = get_dms(friend)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+friend,"dm",dm)
+
+  online_people = get_online_friends(friend)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+friend,"whosonline",online_person)
   writeDB(db)
   return "ok"
 
@@ -797,6 +861,22 @@ def cancelfriendrequest():
 
   pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
+
+  dms = get_dms(user)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+user,"dm",dm)
+
+  online_people = get_online_friends(user)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+user,"whosonline",online_person)
+
+  dms = get_dms(friend)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+friend,"dm",dm)
+
+  online_people = get_online_friends(friend)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+friend,"whosonline",online_person)
   writeDB(db)
   return "ok"
 
@@ -821,6 +901,22 @@ def acceptfriendrequest():
 
   pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
+
+  dms = get_dms(user)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+user,"dm",dm)
+
+  online_people = get_online_friends(user)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+user,"whosonline",online_person)
+
+  dms = get_dms(friend)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+friend,"dm",dm)
+
+  online_people = get_online_friends(friend)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+friend,"whosonline",online_person)
   writeDB(db)
   return "ok"
 
@@ -843,6 +939,22 @@ def declinefriendrequest():
 
   pusher_client.trigger("private-user-"+friend,"friends",db["users"][friend]["friendData"])
   pusher_client.trigger("private-user-"+user,"friends",db["users"][user]["friendData"])
+
+  dms = get_dms(user)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+user,"dm",dm)
+
+  online_people = get_online_friends(user)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+user,"whosonline",online_person)
+
+  dms = get_dms(friend)
+  for dm in dms:
+      pusher_client.trigger("private-user-"+friend,"dm",dm)
+
+  online_people = get_online_friends(friend)
+  for online_person in online_people:
+      pusher_client.trigger("private-user-"+friend,"whosonline",online_person)
   writeDB(db)
   return "ok"
 
@@ -1021,15 +1133,7 @@ def get_messages():
     writeDB(db)
     return "ok"
 
-@app.route('/get-friends', methods=['POST'])
-def get_friends():
-    data = request.json
-    socket_id = data.get("socket_id","")
-    user = session.get("user")
-    
-    pusher_client.trigger("private-socket_id-"+socket_id,"friends",db["users"][user]["friendData"])
-
-    #show all dms!
+def get_dms(user):
     for friend in db["users"][user]["friendData"]["friends"]:
         room = "presence-dm-" + most_alphabetical_order(user,friend) + "2"+least_alphabetical_order(user,friend)
         
@@ -1045,25 +1149,40 @@ def get_friends():
                 "amount": db["chatData"][room]["ids"] - db["userdata"][user][room]["read"]
             }
 
-            pusher_client.trigger("private-socket_id-"+socket_id,"dm",data)
+            yield data
 
-
-    #show all online people
+def get_online_friends(user):
     for friend in db["users"][user]["friendData"]["friends"]:
         if friend in db["userdata"]:
             data = {
                 "user": friend,
                 "online": db["userdata"][friend]["online"]
             }
-
-            pusher_client.trigger("private-socket_id-"+socket_id,"whosonline",data)
-
         else:
             data = {
                 "user": friend,
                 "online": False
             }
-            pusher_client.trigger("private-socket_id-"+socket_id,"whosonline",data)
+        
+        yield data
+        
+
+
+@app.route('/get-friends', methods=['POST'])
+def get_friends():
+    data = request.json
+    socket_id = data.get("socket_id","")
+    user = session.get("user")
+    
+    pusher_client.trigger("private-socket_id-"+socket_id,"friends",db["users"][user]["friendData"])
+
+    dms = get_dms(user)
+    for dm in dms:
+        pusher_client.trigger("private-socket_id-"+socket_id,"dm",dm)
+
+    online_people = get_online_friends(user)
+    for online_person in online_people:
+        pusher_client.trigger("private-socket_id-"+socket_id,"whosonline",online_person)
 
     writeDB(db)
     return "ok"
